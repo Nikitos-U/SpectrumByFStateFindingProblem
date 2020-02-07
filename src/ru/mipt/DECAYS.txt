@@ -1,0 +1,124 @@
+Decay D_1+
+0.3333    D*+ pi0                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+0.6667    D*0 pi+                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+Enddecay
+Decay D_1-
+0.3333    D*- pi0                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+0.6667    anti-D*0 pi-                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+Enddecay
+Decay D_10
+0.3333    D*0 pi0                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+0.6667    D*+ pi-                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+Enddecay
+Decay anti-D_10
+0.3333    anti-D*0 pi0                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+0.6667    D*- pi+                        VVS_PWAVE  0.0 0.0 0.0 0.0 1.0 0.0;
+Enddecay
+Decay D'_1+
+0.3333    D*+ pi0                        VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+0.6667    D*0 pi+                        VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+Enddecay
+Decay D'_1-
+0.3333    D*- pi0                        VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+0.6667    anti-D*0 pi-                        VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+Enddecay
+Decay D'_10
+0.6667    D*+ pi-                        VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+0.3333    D*0 pi0                        VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+Enddecay
+Decay anti-D'_10
+0.3333    anti-D*0 pi0                   VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+0.6667    D*- pi+                        VVS_PWAVE  1.0 0.0 0.0 0.0 0.0 0.0;
+Enddecay
+Decay K_S0
+0.691086452 pi+     pi-                                     PHSP; #[Reconstructed PDG2011]
+0.305986452 pi0     pi0                                     PHSP; #[Reconstructed PDG2011]
+0.000000201 pi+     pi-     pi0                             PHSP;  #[New mode added] #[Reconstructed PDG2011]
+0.001722185 pi+     pi-     gamma                           PHSP;  #[New mode added] #[Reconstructed PDG2011]
+0.000042831 pi+     pi-     e+      e-                      PHSP;  #[New mode added] #[Reconstructed PDG2011]
+0.000000025 pi0     gamma   gamma                           PHSP;  #[New mode added] #[Reconstructed PDG2011]
+0.000002399 gamma   gamma                                   PHSP;  #[New mode added] #[Reconstructed PDG2011]
+0.000344328 pi+     e-      anti-nu_e                       PHSP;  #[New mode added] #[Reconstructed PDG2011]
+0.000344328 pi-     e+      nu_e                            PHSP;  #[New mode added] #[Reconstructed PDG2011]
+0.000235400 pi+     mu-     anti-nu_mu                      PHSP;  #[New mode added] #TP manually added 9/1/2011 according to pdg
+0.000235400 pi-     mu+     nu_mu                           PHSP;  #[New mode added] #TP manually added 9/1/2011 according to pdg
+Enddecay
+Decay K0
+0.500     K_L0                              PHSP;
+0.500     K_S0                              PHSP;
+Enddecay
+Decay anti-K0
+0.500     K_L0                              PHSP;
+0.500     K_S0                              PHSP;
+Enddecay
+Decay K*0
+0.6657      K+  pi-                        VSS;
+0.3323      K0  pi0                        VSS;
+0.0020      K0  gamma                       VSP_PWAVE;
+Enddecay
+Decay anti-K*0
+0.6657      K-  pi+                        VSS;
+0.3323      anti-K0   pi0                        VSS;
+0.0020      anti-K0   gamma                       VSP_PWAVE;
+Enddecay
+Decay K*+
+0.6657      K0  pi+                        VSS;
+0.3323      K+  pi0                        VSS;
+0.0020      K+  gamma                       VSP_PWAVE;
+Enddecay
+Decay K*-
+0.6657      anti-K0   pi-                        VSS;
+0.3323      K-  pi0                        VSS;
+0.0020      K-  gamma                       VSP_PWAVE;
+Enddecay
+Decay K*L
+1.0000      pi0 K_L0                       VSS;
+Enddecay
+Decay K*S
+1.0000      pi0 K_S0                       VSS;
+Enddecay
+Decay K*BL
+1.0000      pi0 K_L0                       VSS;
+Enddecay
+Decay K*BS
+1.0000      pi0 K_S0                       VSS;
+Enddecay
+Decay K*0T
+1.0000      pi- K+                        VSS;
+Enddecay
+Decay anti-K*0T
+1.0000      pi+ K-                        VSS;
+Enddecay
+Decay K_0*+
+0.6667      K0  pi+                       PHSP;
+0.3333      K+  pi0                       PHSP;
+Enddecay
+Decay K_0*-
+0.6667      anti-K0   pi-                 PHSP;
+0.3333      K-  pi0                       PHSP;
+Enddecay
+Decay K_0*0
+0.6667      K+  pi-                       PHSP;
+0.3333      K0  pi0                       PHSP;
+Enddecay
+Decay K_0*0N
+1.0000      K0  pi0                       PHSP;
+Enddecay
+Decay anti-K_0*0
+0.6667      K-  pi+                       PHSP;
+0.3333      anti-K0   pi0                 PHSP;
+Enddecay
+Decay anti-K_0*0N
+1.0000      anti-K0   pi0                 PHSP;
+Enddecay
+Decay K_10
+0.2800   rho-  K+                        VVS_PWAVE 1.0 0.0 0.0 0.0 0.0 0.0;
+0.1400   rho0  K0                        VVS_PWAVE 1.0 0.0 0.0 0.0 0.0 0.0;
+0.1067   K*+   pi-                       VVS_PWAVE 1.0 0.0 0.0 0.0 0.0 0.0;
+0.0533   K*0   pi0                       VVS_PWAVE 1.0 0.0 0.0 0.0 0.0 0.0;
+0.1100   omega  K0                        VVS_PWAVE 1.0 0.0 0.0 0.0 0.0 0.0;
+0.1444   K0    pi+ pi-                   PHSP;
+0.1244   K+    pi- pi0                   PHSP;
+0.0412   K0    pi0 pi0                   PHSP;
+Enddecay
+------------------------------------------------------------------------------------------------------------------------------------------------------------------

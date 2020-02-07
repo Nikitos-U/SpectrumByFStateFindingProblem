@@ -15,7 +15,7 @@ public class ParticleCombinator {
                 s += result[i];
             }
             result1.add(s);
-            System.out.println(result1);
+            //System.out.println(result1);
             return result1;
         }
         for (int i = startPosition; i <= fstate.size() - len; i++) {
@@ -37,7 +37,7 @@ public class ParticleCombinator {
                     allFstateCombinations.add(combination);
             }
         }
-        System.out.println(allFstateCombinations);
+        //System.out.println(allFstateCombinations);
         return allFstateCombinations;
     }
 }
