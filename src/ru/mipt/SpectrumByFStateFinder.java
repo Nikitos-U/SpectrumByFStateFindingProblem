@@ -25,10 +25,14 @@ public class SpectrumByFStateFinder {
         Double fstateMass = MassCounter.countMass(fstate, particles);
         System.out.println("fstateMass = " + fstateMass + " keV");
         ParticleCombinator combinator = new ParticleCombinator();
-        ArrayList<String> allCombinations = new ArrayList<>();
-        allCombinations = combinator.allCombinations(fstate, 0);
+        ArrayList<ArrayList<Particle>> allCombinations = new ArrayList<>();
+        allCombinations = combinator.allCombinations(fstate, 0,particles);
+        /*
         for (String combination : allCombinations) {
             System.out.println(combination);
+        }*/
+        for (ArrayList<Particle> combination : allCombinations) {
+            System.out.println(combination.toString());
         }
         DecayParser decayParser = new DecayParser();
         decays = decayParser.parse(particles);
@@ -38,7 +42,7 @@ public class SpectrumByFStateFinder {
             System.out.println(decay);
         }*/
         System.out.println("Decays parsed: " + decays.size());
-        ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(allCombinations, decays, particles);
-        System.out.println(probableParticlesMaker.convertCombinationsToParticles());
+        //ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(allCombinations, decays, particles);
+        //System.out.println(probableParticlesMaker.convertCombinationsToParticles());
     }
 }

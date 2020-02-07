@@ -24,20 +24,45 @@ public class ParticleCombinator {
         return result1;
     }
 
-    ArrayList<String> allCombinations(ArrayList<String> fstate, int startPosition) {
-        ArrayList<String> allFstateCombinations = new ArrayList<>();
+    ArrayList<ArrayList<Particle>> allCombinations(ArrayList<String> fstate, int startPosition, HashMap<String, Particle> parsedParticles) {
+        //ArrayList<String> allFstateCombinations = new ArrayList<>();
         ArrayList<String> fstateCombination = new ArrayList<>();
-        allFstateCombinations.addAll(fstate);
+        //allFstateCombinations.addAll(fstate);
+        ArrayList<ArrayList<Particle>> result = new ArrayList<>();
+        for (String s : fstate) {
+            ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
+            for (Particle particle : parsedParticles.values()) {
+                if (particle.alias.equals(s) || particle.name.equals(s)) {
+                    possibleDecayParticles.add(particle);
+                }
+            }
+            result.add(possibleDecayParticles);
+            System.out.println("result posle dobavleniya tolko fstate: " + result);
+        }
         for (int i = 2; i <= fstate.size(); i++) {
             //System.out.println(i);
             fstateCombination = combinations2(fstate, i, startPosition, new String[i]);
+            System.out.println(fstateCombination);
+            for (String s : fstateCombination) {
+                ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
+                for (int j = 0; j < s.length(); j++) {
+                    for (Particle particle : parsedParticles.values()) {
+                        if (particle.alias.equals(s.substring(j, j + 1)) || particle.name.equals(s.substring(j, j + 1))) {
+                            possibleDecayParticles.add(particle);
+                        }
+                    }
+                }
+                result.add(possibleDecayParticles);
+            }
+            /*
             for (String combination : fstateCombination) {
                 if (!allFstateCombinations.contains(combination))
                     allFstateCombinations.add(combination);
             }
+             */
         }
-        //System.out.println(allFstateCombinations);
-        return allFstateCombinations;
+        System.out.println("result: " + result);
+        return result;
     }
 }
 
