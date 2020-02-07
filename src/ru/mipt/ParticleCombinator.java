@@ -9,7 +9,6 @@ public class ParticleCombinator {
 
     ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
         if (len == 0) {
-            //System.out.println(Arrays.toString(result));
             String s = "";
             for (int i = 0; i < result.length; i++) {
                 s += result[i];
