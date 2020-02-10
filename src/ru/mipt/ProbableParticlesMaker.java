@@ -2,35 +2,32 @@ package ru.mipt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ProbableParticlesMaker {
-    private ArrayList<String> allFstateCombinations;
+    private ArrayList<ArrayList<Particle>> allFstateCombinations;
     private ArrayList<Decay> parsedDecays;
     private HashMap parsedParticles;
 
 
-    public ProbableParticlesMaker(ArrayList<String> allFstateCombinations, ArrayList<Decay> parsedDecays, HashMap parsedParticles) {
+    public ProbableParticlesMaker(ArrayList<ArrayList<Particle>> allFstateCombinations, ArrayList<Decay> parsedDecays, HashMap parsedParticles) {
         this.allFstateCombinations = allFstateCombinations;
         this.parsedDecays = parsedDecays;
         this.parsedParticles = parsedParticles;
     }
 
-    public ArrayList<Particle> convertCombinationsToParticles() {
-        ArrayList<String> probableParticlesNames = new ArrayList<>();
-        ArrayList<Particle> probableParticles = new ArrayList<>();
-        for (String fstateCombination : allFstateCombinations) {
+    public Map<Integer, Particle> convertCombinationsToParticles() {
+        Map<Integer, Particle> probableParticles = new HashMap<>();
+        for (ArrayList<Particle> fstateCombination : allFstateCombinations) {
             for (Decay parsedDecay : parsedDecays) {
                 if (fstateCombination.equals(parsedDecay.particles)) {
-                    probableParticlesNames.add(parsedDecay.name);
-
+                    for (Object value : parsedParticles.values()) {
+                        if (parsedDecay.name.equals(((Particle) value).name) || parsedDecay.name.equals(((Particle) value).alias)) {
+                            probableParticles.put(parsedDecay.particles.size(), (Particle) value);
+                        }
+                    }
                     System.out.println(parsedDecay.name);
                 }
-            }
-        }
-        for (String probableParticlesName : probableParticlesNames) {
-            if (parsedParticles.containsKey(probableParticlesName)) {
-                probableParticles.add((Particle) parsedParticles.get(probableParticlesName));
-                System.out.println(probableParticles);
             }
         }
         return probableParticles;

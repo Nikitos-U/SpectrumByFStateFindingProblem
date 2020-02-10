@@ -42,7 +42,7 @@ public class SpectrumByFStateFinder {
             System.out.println(decay);
         }*/
         System.out.println("Decays parsed: " + decays.size());
-        //ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(allCombinations, decays, particles);
-        //System.out.println(probableParticlesMaker.convertCombinationsToParticles());
+        ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(allCombinations, decays, particles);
+        System.out.println(probableParticlesMaker.convertCombinationsToParticles());
     }
 }
