@@ -11,7 +11,7 @@ public class ParticleCombinator {
         if (len == 0) {
             String s = "";
             for (int i = 0; i < result.length; i++) {
-                s += result[i];
+                s += " " + result[i];
             }
             result1.add(s);
             //System.out.println(result1);
@@ -45,9 +45,9 @@ public class ParticleCombinator {
             System.out.println(fstateCombination);
             for (String s : fstateCombination) {
                 ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
-                for (int j = 0; j < s.length(); j++) {
+                for (int j = 0; j < s.split("\\s+").length; j++) {
                     for (Particle particle : parsedParticles.values()) {
-                        if (particle.alias.equals(s.substring(j, j + 1)) || particle.name.equals(s.substring(j, j + 1))) {
+                        if (particle.alias.equals(s.split("\\s+")[j].trim()) || particle.name.equals(s.substring(j, j + 1))) {
                             possibleDecayParticles.add(particle);
                         }
                     }
