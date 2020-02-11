@@ -2,10 +2,7 @@ package ru.mipt;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class SpectrumByFStateFinder {
     public static void main(String[] args) throws IOException {
@@ -43,6 +40,15 @@ public class SpectrumByFStateFinder {
         }*/
         System.out.println("Decays parsed: " + decays.size());
         ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(allCombinations, decays, particles);
-        System.out.println(probableParticlesMaker.convertCombinationsToParticles());
+        Map<Integer, Particle> probableParticles = new HashMap<>();
+        probableParticles.putAll(probableParticlesMaker.convertCombinationsToParticles());
+        System.out.println(probableParticles);
+        Map<Integer, Particle> fstateMap = new HashMap<>();
+        for (int i = 0; i < fstate.size(); i++) {
+            fstateMap.put(1, particles.get(fstate.get(i)));
+            System.out.println(particles.get(fstate.get(i)));
+        }
+        probableParticles.putAll(fstateMap);
+        System.out.println(probableParticles);
     }
 }
