@@ -5,11 +5,15 @@ import java.util.List;
 
 public class CascadeFinder {
 
+    private ArrayList<Cascade> newCascades;
+    private ArrayList<Fstate> newFstates;
+
     public CascadeFinder() {
     }
 
-    public List<Cascade> FindDecays(Cascade cascade) {
-
+    public List<Cascade> FindDecays(Cascade cascade, Fstate fstate) {
         return new ArrayList<Cascade>();
     }
+
+
 }
