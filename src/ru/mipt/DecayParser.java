@@ -15,15 +15,18 @@ public class DecayParser {
     public DecayParser() throws FileNotFoundException {
     }
 
-    public ArrayList<Decay> parse(HashMap<String, Particle> parsedParticles) throws IOException {
-        ArrayList <Decay> parsedDecays = new ArrayList<>();
+    // TODO HASMAP
+    public HashMap<String, Decay> parse(HashMap<String, Particle> parsedParticles) throws IOException {
+        HashMap<String, Decay> parsedDecays = new HashMap<>();
         String line = "";
         String decayName = "";
+        String hashKeyParticles = "";
         while (!(line = reader.readLine()).startsWith("-")) {
             if (line.startsWith("Decay")) {
                 decayName = line.split(" ")[1].trim();
                 line = reader.readLine();
                 while (!(line.equals("Enddecay"))) {
+                    hashKeyParticles += decayName + ":";
                     //System.out.println(line);
                     Double probability = Double.parseDouble(line.split(" ")[0].trim());
                     ArrayList<Particle> particles = new ArrayList<>();
@@ -36,13 +39,16 @@ public class DecayParser {
                         for (Particle particle : parsedParticles.values()) {
                             if (particle.alias.equals(line.split("\\s+")[i].trim()) || particle.name.equals(line.split("\\s+")[i].trim())) {
                                 particles.add(parsedParticles.get(particle.name));
+                                hashKeyParticles += particle.name + ",";
                             }
                         }
                         i++;
                     }
                     Decay someDecay = new Decay(decayName, particles, probability);
                     //System.out.println(someDecay.particles);
-                    parsedDecays.add(someDecay);
+                    hashKeyParticles = hashKeyParticles.substring(0, hashKeyParticles.length() - 1);
+                    parsedDecays.put(hashKeyParticles, someDecay);
+                    hashKeyParticles = "";
                     line = reader.readLine();
                 }
             }

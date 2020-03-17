@@ -4,6 +4,7 @@ public class Particle {
     final String name;
     String alias;
     final Double mass;
+//   TODO: antiparticle, charge
 
     public Particle(String name, Double mass) {
         this.name = name;

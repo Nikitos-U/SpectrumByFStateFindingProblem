@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Decay {
     final ArrayList<Particle> particles;
-    String name;
+    String name; // Particle
     Double probability = 0.0;
     Double mass = 0.0;
-
+// TODO charge conjugation method
     public Decay(String name, ArrayList<Particle> particles, Double probability) {
         this.name = name;
         this.particles = particles;
