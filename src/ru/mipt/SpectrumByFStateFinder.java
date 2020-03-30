@@ -51,5 +51,15 @@ public class SpectrumByFStateFinder {
         fstateMap.put(1,fstateParticles);
         probableParticles.putAll(fstateMap);
         System.out.println(probableParticles);
+
     }
+        public ArrayList<Cascade> fromFinalCascadeChooser(ArrayList<Cascade> finalCascades) {
+        ArrayList<Cascade> result = new ArrayList<>();
+            for (Cascade finalCascade : finalCascades) {
+                if (finalCascade.fstate.size() <= 1) {
+                    result.add(finalCascade);
+                }
+            }
+            return result;
+        }
 }
