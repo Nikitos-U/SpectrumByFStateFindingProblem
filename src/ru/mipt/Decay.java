@@ -4,12 +4,12 @@ import java.util.ArrayList;
 
 public class Decay {
     final ArrayList<Particle> particles;
-    String name; // Particle
+    Particle motherParticle; // Particle
     Double probability = 0.0;
     Double mass = 0.0;
 // TODO charge conjugation method
-    public Decay(String name, ArrayList<Particle> particles, Double probability) {
-        this.name = name;
+    public Decay(Particle motherParticle, ArrayList<Particle> particles, Double probability) {
+        this.motherParticle = motherParticle;
         this.particles = particles;
         this.probability = probability;
         for (Particle particle : particles) {
@@ -19,8 +19,8 @@ public class Decay {
 
     @Override
     public String toString() {
-        return "rasspad chasticy: " + this.name + " na chasticy: "
-                + this.particles.toString() + " s veroyatnostiu: " + this.probability
-                + " s massoy: " + this.mass;
+        return "rasspad: " + this.motherParticle.name + " na "
+                + this.particles.toString(); /*+ " s veroyatnostiu: " + this.probability
+                + " s massoy: " + this.mass;*/
     }
 }

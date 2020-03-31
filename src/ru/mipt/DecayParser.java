@@ -44,9 +44,16 @@ public class DecayParser {
                         }
                         i++;
                     }
-                    Decay someDecay = new Decay(decayName, particles, probability);
+                    Particle motherParticle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0);
+                    for (Particle particle : parsedParticles.values()) {
+                        if (particle.alias.equals(decayName) || particle.name.equals(decayName)) {
+                            motherParticle = particle;
+                        }
+                    }
+                    Decay someDecay = new Decay(motherParticle, particles, probability);
                     //System.out.println(someDecay.particles);
                     hashKeyParticles = hashKeyParticles.substring(0, hashKeyParticles.length() - 1);
+                    hashKeyParticles += " " + particles.size();
                     parsedDecays.put(hashKeyParticles, someDecay);
                     hashKeyParticles = "";
                     line = reader.readLine();

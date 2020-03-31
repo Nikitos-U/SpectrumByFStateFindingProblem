@@ -1,6 +1,5 @@
 package ru.mipt;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -8,42 +7,60 @@ public class SpectrumByFStateFinder {
     //Основной класс из него вызываются парсеры и классы, исполняющие логику алгоритма
     public static void main(String[] args) throws IOException {
         ParticleParser particleParser = new ParticleParser();
-        HashMap<String, Particle> particles = new HashMap<>();
+        HashMap<String, Particle> particles;
         particles = particleParser.parse();
         //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
         //значением сама частица (объект класса Particle)
         ArrayList<Decay> decays;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Vvedite fstate");
-        ArrayList<String> fstate = new ArrayList<>();
+        Cascade fstate = new Cascade();
         String inputParticle = "";
         while (!inputParticle.equals("exit")) {
             inputParticle = scanner.nextLine();
-            fstate.add(inputParticle);
+            for (Particle particle : particles.values()) {
+                if (particle.alias.equals(inputParticle) || particle.name.equals(inputParticle)) {
+                    fstate.particleList.add(particle);
+                }
+            }
         }
-        fstate.remove("exit");
-        //выше происходит ввод fstate
-        Double fstateMass = MassCounter.countMass(fstate, particles);
+        Double fstateMass = MassCounter.countMass(fstate.particleList);
         System.out.println("fstateMass = " + fstateMass + " keV");
-        ParticleCombinator combinator = new ParticleCombinator();
-        ArrayList<ArrayList<Particle>> allCombinations = new ArrayList<>();
-        allCombinations = combinator.allCombinations(fstate, 0, particles);
-        //составление всевозможных комбинаций из частиц (пар, троек итд)
-        //метод возвращает ArrayList<ArrayList<Particle>> - в каждом вложенном массиве перечисленны
-        //частицы входящие в пару, тройку итд
-        for (ArrayList<Particle> combination : allCombinations) {
-            System.out.println(combination.toString());
-        }
+        ParticleCombinator combinator = new ParticleCombinator(particles);
+        //ArrayList<Cascade> allCombinations;
         DecayParser decayParser = new DecayParser();
         decays = decayParser.parse(particles);
-        //Распарс модельного файла с распадами(содержит 67 распадов), возвращается ArrayList<Decay>
-        System.out.println("Decays parsed: " + decays.size());
-        System.out.println(decays.get("K+,pi0,"));
-        for (String decayParticles : decays.keySet()) {
-            System.out.println(decayParticles);
+        ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
+        DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
+        ArrayList<Cascade> finalCascades;
+        finalCascades = decaysFinder.findDecays(fstate);
+        for (int i = 0; i < finalCascades.size(); i++) {
+            for (int j = 0; j < finalCascades.size(); j++) {
+                if (i != j) {
+//                    System.out.println("Cascade" + i + " " + finalCascades.get(i));
+//                    System.out.println("Cascade" + j + " " + finalCascades.get(j));
+                    if (finalCascades.get(i).particleList.equals(finalCascades.get(j).particleList) && finalCascades.get(i).history.equals(finalCascades.get(j).history)) {
+                        finalCascades.remove(i);
+                    }
+                }
+            }
         }
-        //ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(allCombinations, decays, particles);
+        System.out.println("");
+        for (Cascade cascade : finalCascades) {
+            System.out.println(cascade);
+        }
+
+//        System.out.println("Rasparsily vot takie vot raspady: ");
+//        for (Decay decay : decays.values()) {
+//            System.out.println(decay);
+//        }
         System.out.println("Decays parsed: " + decays.size());
+//        System.out.println(decays.get("K+,pi0,"));
+//        for (String decayParticles : decays.keySet()) {
+//            System.out.println(decayParticles);
+//        }
+//        System.out.println("Decays parsed: " + decays.size());
+        //ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(allCombinations, decays, particles);
 //        Map<Integer, Particle> probableParticles = new HashMap<>();
 //        probableParticles.putAll(probableParticlesMaker.convertCombinationsToParticles());
 //        System.out.println(probableParticles);

@@ -1,9 +1,9 @@
 package ru.mipt;
 
 public class Particle {
-    final String name;
+    String name;
     String alias;
-    final Double mass;
+    Double mass;
 //   TODO: antiparticle, charge
 
     public Particle(String name, Double mass) {
