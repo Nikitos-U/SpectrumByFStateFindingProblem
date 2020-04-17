@@ -20,7 +20,6 @@ public class ParticleCombinator {
                 s += " " + result[i];
             }
             result1.add(s);
-            //System.out.println("result1: " + result1);
             s = "";
             return result1;
         }
@@ -44,19 +43,15 @@ public class ParticleCombinator {
             preParticles.add(particle);
             result.add(preParticles);
         }
-        System.out.println("fstate: " + fstate);
+        System.out.println("Processing this fstate: " + fstate);
         for (int i = 2; i <= fstate.size(); i++) {
-            //System.out.println(i);
             fstateCombination = new ArrayList<>();
             fstateCombination = combinations2(fstate, i, 0, new String[i]);
-            //System.out.println("fstate combination: " + fstateCombination);
             for (String s : fstateCombination) {
                 ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
                 for (int j = 0; j < s.split("\\s+").length; j++) {
-                    //System.out.println(s.split("\\s+")[j]);
                     for (Particle particle : parsedParticles.values()) {
                         if (particle.alias.equals(s.split("\\s+")[j].trim()) || particle.name.equals(s.split("\\s+")[j].trim())) {
-                            //System.out.println("dobavlyaem chasticu s imenem: " + particle.name + " alias: " + particle.alias);
                             possibleDecayParticles.add(particle);
                         }
                     }
@@ -64,7 +59,6 @@ public class ParticleCombinator {
                 if (!possibleDecayParticles.containsAll(cascade.particleList)) {
                     Integer counter = possibleDecayParticles.size();
                     while (counter < fstateSize) {
-                        System.out.println(possibleDecayParticles);
                         if (!probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).isEmpty()) {
                             for (Decay decay : probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).values()) {
                                 Cascade formedCascade = new Cascade();
@@ -100,12 +94,11 @@ public class ParticleCombinator {
                 possibleDecayParticles.clear();
             }
         }
-//        System.out.println("result: " + result);
-        System.out.println("++++++++++++++++++++++++++++++++VOT ETO USHLO V OBRABOTKU+++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++++Result combinations:++++++++++++++++++++++++++++++++");
         for (Cascade cascade1 : cascades) {
             System.out.println(cascade1);
         }
-        System.out.println("++++++++++++++++++++++++++++++++END+++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++++END++++++++++++++++++++++++++++++++");
         return cascades;
     }
 }

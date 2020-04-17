@@ -19,8 +19,6 @@ public class DecaysFinder {
     public ArrayList<Cascade> findDecays(Cascade fstate) {
         ArrayList<Cascade> finalCascades = new ArrayList<>();
         ArrayList<Cascade> tmp = new ArrayList<>();
-//        tmp =
-//        finalCascades.addAll(tmp);
         if (fstate.particleList.size() == 1) {
             finalCascades.add(fstate);
             return finalCascades;

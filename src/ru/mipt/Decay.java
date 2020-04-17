@@ -19,8 +19,7 @@ public class Decay {
 
     @Override
     public String toString() {
-        return "rasspad: " + this.motherParticle.name + " na "
-                + this.particles.toString(); /*+ " s veroyatnostiu: " + this.probability
-                + " s massoy: " + this.mass;*/
+        return "decay of: " + this.motherParticle.name + " on "
+                + this.particles.toString();
     }
 }

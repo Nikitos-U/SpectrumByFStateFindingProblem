@@ -5,7 +5,6 @@ import java.util.ArrayList;
 public class Cascade {
     ArrayList<Particle> particleList;
     ArrayList<Decay> history;
-    Integer numberOfParticles = 0;
 
     public Cascade(ArrayList<Particle> particleList, ArrayList<Decay> history) {
         this.particleList = particleList;
@@ -22,4 +21,14 @@ public class Cascade {
         return "Cascade with particle list: " + this.particleList
                 + " and history: " + this.history;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Cascade){
+            return ((Cascade) obj).particleList.equals(this.particleList) && ((Cascade) obj).history.equals(this.history);
+        } else {
+            return super.equals(obj);
+        }
+    }
+
 }

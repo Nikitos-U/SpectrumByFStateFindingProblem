@@ -15,7 +15,6 @@ public class DecayParser {
     public DecayParser() throws FileNotFoundException {
     }
 
-    // TODO HASMAP
     public HashMap<String, Decay> parse(HashMap<String, Particle> parsedParticles) throws IOException {
         HashMap<String, Decay> parsedDecays = new HashMap<>();
         String line = "";
@@ -27,15 +26,10 @@ public class DecayParser {
                 line = reader.readLine();
                 while (!(line.equals("Enddecay"))) {
                     hashKeyParticles += decayName + ":";
-                    //System.out.println(line);
                     Double probability = Double.parseDouble(line.split(" ")[0].trim());
                     ArrayList<Particle> particles = new ArrayList<>();
                     int i = 1;
-                /*for (int j = 0;j < 4; j++){
-                    System.out.println("Prost posmotrim kak tam liniya parsitsya: " + line.split("\\s+")[1].trim());
-                }*/
                     while (!line.split("\\s+")[i].endsWith(";")) {
-                        //System.out.println("Smotrim na vot etot kusok stroki: " + line.split("\\s+")[i]);
                         for (Particle particle : parsedParticles.values()) {
                             if (particle.alias.equals(line.split("\\s+")[i].trim()) || particle.name.equals(line.split("\\s+")[i].trim())) {
                                 particles.add(parsedParticles.get(particle.name));
@@ -51,7 +45,6 @@ public class DecayParser {
                         }
                     }
                     Decay someDecay = new Decay(motherParticle, particles, probability);
-                    //System.out.println(someDecay.particles);
                     hashKeyParticles = hashKeyParticles.substring(0, hashKeyParticles.length() - 1);
                     hashKeyParticles += " " + particles.size();
                     parsedDecays.put(hashKeyParticles, someDecay);
