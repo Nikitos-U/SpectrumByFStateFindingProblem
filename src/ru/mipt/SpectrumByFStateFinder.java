@@ -11,7 +11,7 @@ public class SpectrumByFStateFinder {
         particles = particleParser.parse();
         //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
         //значением сама частица (объект класса Particle)
-        ArrayList<Decay> decays;
+        HashMap<String, Decay> decays;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter final state");
         Cascade fstate = new Cascade();

@@ -6,6 +6,14 @@ public class Cascade {
     ArrayList<Particle> particleList;
     ArrayList<Decay> history;
 
+    public ArrayList<Particle> getParticleList() {
+        return particleList;
+    }
+
+    public ArrayList<Decay> getHistory() {
+        return history;
+    }
+
     public Cascade(ArrayList<Particle> particleList, ArrayList<Decay> history) {
         this.particleList = particleList;
         this.history = history;
