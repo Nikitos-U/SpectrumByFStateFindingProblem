@@ -6,7 +6,8 @@ import java.util.HashMap;
 
 public class ParticleCombinator {
     ArrayList<String> result1 = new ArrayList<>();
-    HashMap<String,Particle> parsedParticles = new HashMap<>();
+    HashMap<String, Particle> parsedParticles = new HashMap<>();
+    Integer fstateSize = 0;
 
     public ParticleCombinator(HashMap<String, Particle> parsedParticles) {
         this.parsedParticles = parsedParticles;
@@ -35,6 +36,7 @@ public class ParticleCombinator {
         ArrayList<String> fstate = new ArrayList<>();
         ArrayList<ArrayList<Particle>> result = new ArrayList<>();
         ArrayList<Cascade> cascades = new ArrayList<>();
+        fstateSize = cascade.particleList.size();
         result1 = new ArrayList<>();
         for (Particle particle : cascade.particleList) {
             ArrayList<Particle> preParticles = new ArrayList<>();
@@ -59,18 +61,28 @@ public class ParticleCombinator {
                         }
                     }
                 }
-                //System.out.println("Possible decay particles: " + possibleDecayParticles);
                 if (!possibleDecayParticles.containsAll(cascade.particleList)) {
-                    for (Particle particle : cascade.particleList) {
-                        if (!possibleDecayParticles.contains(particle)){
+                    Integer counter = possibleDecayParticles.size();
+                    while (counter < fstateSize) {
+                        System.out.println(possibleDecayParticles);
+                        if (!probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).isEmpty()) {
                             for (Decay decay : probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).values()) {
                                 Cascade formedCascade = new Cascade();
-                                formedCascade.particleList.add(particle);
                                 formedCascade.particleList.add(decay.motherParticle);
                                 formedCascade.history.add(decay);
                                 formedCascade.history.addAll(cascade.history);
-                                cascades.add(formedCascade);
+                                for (Particle particle : cascade.particleList) {
+                                    if (!possibleDecayParticles.contains(particle)) {
+                                        formedCascade.particleList.add(particle);
+                                        counter++;
+                                    }
+                                }
+                                if (!cascades.contains(formedCascade)) {
+                                    cascades.add(formedCascade);
+                                }
                             }
+                        } else {
+                            break;
                         }
                     }
                 } else {
@@ -79,44 +91,21 @@ public class ParticleCombinator {
                         formedCascade.particleList.add(decay.motherParticle);
                         formedCascade.history.add(decay);
                         formedCascade.history.addAll(cascade.history);
-                        cascades.add(formedCascade);
+                        if (!cascades.contains(formedCascade)) {
+                            cascades.add(formedCascade);
+                        }
                     }
                 }
-//                if (possibleDecayParticles.size() < cascade.particleList.size()) {
-//                    for (Decay decay : probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).values()) {
-//                        formedCascade.history.add(decay);
-//                        formedCascade.particleList.add(decay.motherParticle);
-//                        for (Particle particle : cascade.particleList) {
-//                            if (!possibleDecayParticles.contains(particle)) {
-//                                formedCascade.particleList.add(particle);
-////                                System.out.println("Suda dobavim eto: " + formedCascade.particleList);
-////                                System.out.println("cascade: " + formedCascade.particleList + " history: " + formedCascade.history);
-//                            }
-//                        System.out.println(" ");
-//                        System.out.println(formedCascade);
-//                        }
-//                        if (!cascades.contains(formedCascade)) {
-//                            cascades.add(formedCascade);
-//                        }
-//                    }
-//                } else if(possibleDecayParticles.size() == cascade.particleList.size()) {
-//                    for (Decay decay : probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).values()) {
-//                        formedCascade.history.add(decay);
-//                        formedCascade.particleList.add(decay.motherParticle);
-//                    }
-//                    if (!cascades.contains(formedCascade)) {
-//                        cascades.add(formedCascade);
-//                    }
-//                }
                 result.add(possibleDecayParticles);
                 possibleDecayParticles.clear();
             }
         }
 //        System.out.println("result: " + result);
-        System.out.println("++++++++++++++++++++++++++++++++");
+        System.out.println("++++++++++++++++++++++++++++++++VOT ETO USHLO V OBRABOTKU+++++++++++++++++++++++++++++++++");
         for (Cascade cascade1 : cascades) {
             System.out.println(cascade1);
         }
+        System.out.println("++++++++++++++++++++++++++++++++END+++++++++++++++++++++++++++++++++");
         return cascades;
     }
 }

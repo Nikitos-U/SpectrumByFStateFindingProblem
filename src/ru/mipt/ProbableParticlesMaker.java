@@ -26,7 +26,6 @@ public class ProbableParticlesMaker {
                 }
                 if (counter == particles.size()) {
                     probableParticles.put(parsedDecays.get(s).motherParticle, parsedDecays.get(s));
-                    System.out.println(probableParticles);
                 }
             }
         }

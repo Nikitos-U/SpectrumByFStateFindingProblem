@@ -45,7 +45,7 @@ public class SpectrumByFStateFinder {
                 }
             }
         }
-        System.out.println("");
+        System.out.println("_______________FINAL RESULT_______________");
         for (Cascade cascade : finalCascades) {
             System.out.println(cascade);
         }

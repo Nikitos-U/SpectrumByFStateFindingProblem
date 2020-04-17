@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Cascade {
     ArrayList<Particle> particleList;
     ArrayList<Decay> history;
+    Integer numberOfParticles = 0;
 
     public Cascade(ArrayList<Particle> particleList, ArrayList<Decay> history) {
         this.particleList = particleList;

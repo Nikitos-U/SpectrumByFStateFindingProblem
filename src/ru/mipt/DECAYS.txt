@@ -97,4 +97,30 @@ Decay K_10
 0.1244   K+    pi- pi0                   PHSP;
 0.0412   K0    pi0 pi0                   PHSP;
 Enddecay
+Decay TestParticlePairs
+0.033 particle1 particle2                 sadlsdj;
+0.2112 particle1 particle3               asdasda;
+0.2112 particle1 particle4               asdasda;
+0.2112 particle2 particle3               asdasda;
+0.2112 particle2 particle4               asdasda;
+0.2112 particle3 particle4               asdasda;
+Enddecay
+Decay TestParticleThrees
+0.123321 particle1 particle2 particle3        lkasjdlkjsad;
+0.123321 particle1 particle2 particle4        lkasjdlkjsad;
+0.123321 particle1 particle3 particle4        lkasjdlkjsad;
+0.123321 particle2 particle3 particle4        lkasjdlkjsad;
+Enddecay
+Decay TestParticleFours
+0.213213 particle1 particle2 particle3 particle4    jlkasjdlk;
+Enddecay
+Decay TestParticleTwoPairs
+0.1232 TestParticlePairs TestParticlePairs    asdasd;
+Enddecay
+Decay TestParticleThreeAndOne
+0.123321 TestParticleThrees particle1        asdasd;
+0.123321 TestParticleThrees particle2        asdasd;
+0.123321 TestParticleThrees particle3        asdasd;
+0.123321 TestParticleThrees particle4        asdasd;
+Enddecay
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
