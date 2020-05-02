@@ -5,12 +5,15 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class DecayParser {
-    FileReader inputFile = new FileReader("src/ru/mipt/DECAYS.txt");
+    FileReader inputFile = new FileReader("src/ru/mipt/DECAY.DEC");
     BufferedReader reader = new BufferedReader(inputFile);
+    List<String> models = new ArrayList<>(Arrays.asList("PHSP", "PHSP;", "PHSP; ", "HELAMP", "ISGW2;", "PHOTOS", "SVS", "SVS;", "SVV_HELAMP", "PYTHIA", "HQET2", "HQET2;", "ISGW2;","VVS_PWAVE","TAUSCALARNU","VSP_PWAVE;","VUB","VUB;","BTOXSGAMMA","SLN;","SLN","CB3PI-MPP","VSS","VSS;", "VSS; ","VSS_BMIX","VVPIPI;","VVPIPI;2","PARTWAVE","BTO3PI_CP","CB3PI-P00","STS;","SVP_HELAMP","BTOSLLALI;","TAUSCALARNU;","TAUHADNU","TAUVECTORNU;","D_DALITZ;","D_DALITZ;","PARTWAVE","PI0_DALITZ;","ETA_DALITZ;","OMEGA_DALITZ;","SVP_HELAMP","VVPIPI;","PARTWAVE","VVP","VLL;","BaryonPCR","TSS;","TVS_PWAVE"));
 
     public DecayParser() throws FileNotFoundException {
     }
@@ -20,16 +23,21 @@ public class DecayParser {
         String line = "";
         String decayName = "";
         String hashKeyParticles = "";
-        while (!(line = reader.readLine()).startsWith("-")) {
+        while (!(line = reader.readLine().trim()).equals("End")) {
             if (line.startsWith("Decay")) {
-                decayName = line.split(" ")[1].trim();
-                line = reader.readLine();
+                decayName = line.split("\\s+")[1].trim();
+                //System.out.println(decayName);
+                line = reader.readLine().trim();
                 while (!(line.equals("Enddecay"))) {
+                    if (line.startsWith("#") || line.isEmpty()){
+                        line = reader.readLine().trim();
+                        continue;
+                    }
                     hashKeyParticles += decayName + ":";
                     Double probability = Double.parseDouble(line.split(" ")[0].trim());
                     ArrayList<Particle> particles = new ArrayList<>();
                     int i = 1;
-                    while (!line.split("\\s+")[i].endsWith(";")) {
+                    while (!models.contains(line.split("\\s+")[i])) {
                         for (Particle particle : parsedParticles.values()) {
                             if (particle.alias.equals(line.split("\\s+")[i].trim()) || particle.name.equals(line.split("\\s+")[i].trim())) {
                                 particles.add(parsedParticles.get(particle.name));
@@ -44,15 +52,20 @@ public class DecayParser {
                             motherParticle = particle;
                         }
                     }
+                    if (particles.size() == 0 ){
+                        line = reader.readLine().trim();
+                        continue;
+                    }
                     Decay someDecay = new Decay(motherParticle, particles, probability);
                     hashKeyParticles = hashKeyParticles.substring(0, hashKeyParticles.length() - 1);
                     hashKeyParticles += " " + particles.size();
                     parsedDecays.put(hashKeyParticles, someDecay);
                     hashKeyParticles = "";
-                    line = reader.readLine();
+                    line = reader.readLine().trim();
                 }
             }
         }
         return parsedDecays;
+        //TODO parse aliases from decay.dec
     }
 }

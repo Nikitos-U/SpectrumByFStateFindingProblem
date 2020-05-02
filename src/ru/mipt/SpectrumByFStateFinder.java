@@ -24,12 +24,15 @@ public class SpectrumByFStateFinder {
                 }
             }
         }
+        long time = System.currentTimeMillis();
         Double fstateMass = MassCounter.countMass(fstate.particleList);
         System.out.println("fstateMass = " + fstateMass + " keV");
         ParticleCombinator combinator = new ParticleCombinator(particles);
         DecayParser decayParser = new DecayParser();
         decays = decayParser.parse(particles);
         System.out.println("Decays parsed: " + decays.size());
+        //System.out.println(decays.get("B0:K0,K~0,K~0,K+,pi- 5"));
+        //System.out.println(decays.keySet());
         ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
         DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
         ArrayList<Cascade> finalCascades;
@@ -39,10 +42,13 @@ public class SpectrumByFStateFinder {
             System.out.println(cascade);
         }
         System.out.print("Found " + finalCascades.size());
-        if (finalCascades.size() > 1){
-            System.out.print(" cascades");
+        if (finalCascades.size() > 1) {
+            System.out.println(" cascades");
         } else {
-            System.out.print(" cascade");
+            System.out.println(" cascade");
         }
+        System.out.print("Cascades for " + fstate.particleList.size() + " particles found in: ");
+        System.out.print(System.currentTimeMillis() - time);
+        System.out.println(" millis");
     }
 }
