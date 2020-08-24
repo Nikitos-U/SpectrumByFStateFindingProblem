@@ -1,16 +1,31 @@
 package ru.mipt;
 
 import java.io.IOException;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class SpectrumByFStateFinder {
     //Основной класс из него вызываются парсеры и классы, исполняющие логику алгоритма
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
+        DaoClass DaoClass = new DaoClass();
+        Connection connection = DaoClass.getConnectiontoDb();
         ParticleParser particleParser = new ParticleParser();
         HashMap<String, Particle> particles;
         particles = particleParser.parse();
         //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
         //значением сама частица (объект класса Particle)
+        for (String s : particles.keySet()) {
+            String query;
+            String name = particles.get(s).name;
+            String alias = particles.get(s).alias;
+            Double mass = particles.get(s).mass;
+            query = "INSERT INTO PARTICLES VALUES(" + "'" + name + "'," + "'"  + alias + "'," + mass + ");";
+            FstateRepository.executeUpdate(query, connection);
+        }
+        connection.close();
         HashMap<String, Decay> decays;
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter final state");
