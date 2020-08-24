@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProbableParticlesMaker {
-    private HashMap<String, Decay> parsedDecays;
+    private final HashMap<String, Decay> parsedDecays;
 
 
     public ProbableParticlesMaker(HashMap<String, Decay> parsedDecays) {
@@ -17,7 +17,7 @@ public class ProbableParticlesMaker {
         for (String s : parsedDecays.keySet()) {
             String s1 = s.split(":")[1];
             String tmp = s.split(" ")[1];
-            Integer counter = 0;
+            int counter = 0;
             if (Integer.parseInt(tmp) == particles.size()) {
                 for (Particle particle : particles) {
                     if (s1.contains(particle.name) || s1.contains(particle.alias)) {

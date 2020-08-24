@@ -24,6 +24,10 @@ public class Cascade {
         this.history = new ArrayList<>();
     }
 
+    public Double getMass() {
+        return this.particleList.stream().mapToDouble(Particle::getMass).sum();
+    }
+
     @Override
     public String toString(){
         return "Cascade with particle list: " + this.particleList

@@ -3,19 +3,18 @@ package ru.mipt;
 import java.io.IOException;
 import java.util.*;
 
-public class SpectrumByFStateFinder {
+public class AllCascadesByFstateFinder {
     //Основной класс из него вызываются парсеры и классы, исполняющие логику алгоритма
     public static void main(String[] args) throws IOException {
         ParticleParser particleParser = new ParticleParser();
-        HashMap<String, Particle> particles;
-        particles = particleParser.parse();
         //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
         //значением сама частица (объект класса Particle)
-        HashMap<String, Decay> decays;
+        HashMap<String, Particle> particles = particleParser.parse();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter final state");
         Cascade fstate = new Cascade();
+        System.out.println("Enter final state");
         String inputParticle = "";
+        //Создание изначального каскада (fstate) из пользовательского ввода
         while (!inputParticle.equals("exit")) {
             inputParticle = scanner.nextLine();
             for (Particle particle : particles.values()) {
@@ -24,19 +23,15 @@ public class SpectrumByFStateFinder {
                 }
             }
         }
-        Double fstateMass = MassCounter.countMass(fstate.particleList);
-        System.out.println("fstateMass = " + fstateMass + " keV");
         ParticleCombinator combinator = new ParticleCombinator(particles);
+        //Парсинг исходного файла с распадами
         DecayParser decayParser = new DecayParser();
-        decays = decayParser.parse(particles);
-        System.out.println("Decays parsed: " + decays.size());
-        long time = System.currentTimeMillis();
-        //System.out.println(decays.get("B0:K0,K~0,K~0,K+,pi- 5"));
-        //System.out.println(decays.keySet());
+        HashMap<String, Decay> decays = decayParser.parse(particles);
         ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
         DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
-        ArrayList<Cascade> finalCascades;
-        finalCascades = decaysFinder.findDecays(fstate);
+        long time = System.currentTimeMillis();
+        ArrayList<Cascade> finalCascades = decaysFinder.findDecays(fstate);
+        long sumTime = System.currentTimeMillis() - time;
         System.out.println("_______________FINAL RESULT_______________");
         for (Cascade cascade : finalCascades) {
             System.out.println(cascade);
@@ -47,8 +42,6 @@ public class SpectrumByFStateFinder {
         } else {
             System.out.println(" cascade");
         }
-        System.out.print("Cascades for " + fstate.particleList.size() + " particles found in: ");
-        System.out.print(System.currentTimeMillis() - time);
-        System.out.println(" millis");
+        System.out.print("Cascades for " + fstate.particleList.size() + " particles found in: " + sumTime + " millis");
     }
 }

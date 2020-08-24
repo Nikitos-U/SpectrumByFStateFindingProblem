@@ -1,8 +1,6 @@
 package ru.mipt;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 public class DecaysFinder {
     ParticleCombinator particleCombinator;
@@ -13,12 +11,8 @@ public class DecaysFinder {
         this.probableParticlesMaker = probableParticlesMaker;
     }
 
-    public DecaysFinder() {
-    }
-
     public ArrayList<Cascade> findDecays(Cascade fstate) {
         ArrayList<Cascade> finalCascades = new ArrayList<>();
-        ArrayList<Cascade> tmp = new ArrayList<>();
         if (fstate.particleList.size() == 1) {
             finalCascades.add(fstate);
             return finalCascades;

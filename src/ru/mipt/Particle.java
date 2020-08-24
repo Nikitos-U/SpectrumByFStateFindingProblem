@@ -20,4 +20,8 @@ public class Particle {
     public String toString(){
         return this.name;
     }
+
+    public Double getMass() {
+        return mass;
+    }
 }

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class DecayParser {
     FileReader inputFile = new FileReader("src/ru/mipt/DECAY.DEC");
@@ -20,13 +19,12 @@ public class DecayParser {
 
     public HashMap<String, Decay> parse(HashMap<String, Particle> parsedParticles) throws IOException {
         HashMap<String, Decay> parsedDecays = new HashMap<>();
-        String line = "";
-        String decayName = "";
+        String line;
+        String decayName;
         String hashKeyParticles = "";
         while (!(line = reader.readLine().trim()).equals("End")) {
             if (line.startsWith("Decay")) {
                 decayName = line.split("\\s+")[1].trim();
-                //System.out.println(decayName);
                 line = reader.readLine().trim();
                 while (!(line.equals("Enddecay"))) {
                     if (line.startsWith("#") || line.isEmpty()){
