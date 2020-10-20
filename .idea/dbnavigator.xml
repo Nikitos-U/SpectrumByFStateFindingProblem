@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DBNavigator.Project.DataEditorManager">
     <record-view-column-sorting-type value="BY_INDEX" />
-    <value-preview-text-wrapping value="true" />
+    <value-preview-text-wrapping value="false" />
     <value-preview-pinned value="false" />
   </component>
   <component name="DBNavigator.Project.DataExportManager">
@@ -37,7 +37,9 @@ create table decays (mother varchar, probability double, mass double);]]></conso
     <open-files />
   </component>
   <component name="DBNavigator.Project.DatabaseSessionManager">
-    <connection id="4928aec0-96f0-4b81-a596-b93eb4ccd6d9" />
+    <connection id="4928aec0-96f0-4b81-a596-b93eb4ccd6d9">
+      <session name="Session 1" id="ca3c0776-dcba-4834-9aac-f4ffa07c9c4a" />
+    </connection>
   </component>
   <component name="DBNavigator.Project.EditorStateManager">
     <last-used-providers />

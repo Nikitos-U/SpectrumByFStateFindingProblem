@@ -1,4 +1,7 @@
-package ru.mipt;
+package ru.mipt.parsers;
+
+import ru.mipt.Decay;
+import ru.mipt.Particle;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -8,12 +11,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Pattern;
 
 public class DecayParser {
-    FileReader inputFile = new FileReader("src/ru/mipt/DECAY.DEC");
-    BufferedReader reader = new BufferedReader(inputFile);
-    List<String> models = new ArrayList<>(Arrays.asList("PHSP", "PHSP;", "PHSP; ", "HELAMP", "ISGW2;", "PHOTOS", "SVS", "SVS;", "SVV_HELAMP", "PYTHIA", "HQET2", "HQET2;", "ISGW2;","VVS_PWAVE","TAUSCALARNU","VSP_PWAVE;","VUB","VUB;","BTOXSGAMMA","SLN;","SLN","CB3PI-MPP","VSS","VSS;", "VSS; ","VSS_BMIX","VVPIPI;","VVPIPI;2","PARTWAVE","BTO3PI_CP","CB3PI-P00","STS;","SVP_HELAMP","BTOSLLALI;","TAUSCALARNU;","TAUHADNU","TAUVECTORNU;","D_DALITZ;","D_DALITZ;","PARTWAVE","PI0_DALITZ;","ETA_DALITZ;","OMEGA_DALITZ;","SVP_HELAMP","VVPIPI;","PARTWAVE","VVP","VLL;","BaryonPCR","TSS;","TVS_PWAVE"));
+    private FileReader inputFile = new FileReader("src/main/resources/DECAY.DEC");
+    private BufferedReader reader = new BufferedReader(inputFile);
+    private List<String> models = new ArrayList<>(Arrays.asList("PHSP", "PHSP;", "PHSP; ", "HELAMP", "ISGW2;", "PHOTOS", "SVS", "SVS;", "SVV_HELAMP", "PYTHIA", "HQET2", "HQET2;", "ISGW2;","VVS_PWAVE","TAUSCALARNU","VSP_PWAVE;","VUB","VUB;","BTOXSGAMMA","SLN;","SLN","CB3PI-MPP","VSS","VSS;", "VSS; ","VSS_BMIX","VVPIPI;","VVPIPI;2","PARTWAVE","BTO3PI_CP","CB3PI-P00","STS;","SVP_HELAMP","BTOSLLALI;","TAUSCALARNU;","TAUHADNU","TAUVECTORNU;","D_DALITZ;","D_DALITZ;","PARTWAVE","PI0_DALITZ;","ETA_DALITZ;","OMEGA_DALITZ;","SVP_HELAMP","VVPIPI;","PARTWAVE","VVP","VLL;","BaryonPCR","TSS;","TVS_PWAVE"));
 
     public DecayParser() throws FileNotFoundException {
     }
@@ -39,16 +41,16 @@ public class DecayParser {
                     int i = 1;
                     while (!models.contains(line.split("\\s+")[i])) {
                         for (Particle particle : parsedParticles.values()) {
-                            if (particle.alias.equals(line.split("\\s+")[i].trim()) || particle.name.equals(line.split("\\s+")[i].trim())) {
-                                particles.add(parsedParticles.get(particle.name));
-                                hashKeyParticles += particle.name + ",";
+                            if (particle.getAlias().equals(line.split("\\s+")[i].trim()) || particle.getName().equals(line.split("\\s+")[i].trim())) {
+                                particles.add(parsedParticles.get(particle.getName()));
+                                hashKeyParticles += particle.getName() + ",";
                             }
                         }
                         i++;
                     }
                     Particle motherParticle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0);
                     for (Particle particle : parsedParticles.values()) {
-                        if (particle.alias.equals(decayName) || particle.name.equals(decayName)) {
+                        if (particle.getAlias().equals(decayName) || particle.getName().equals(decayName)) {
                             motherParticle = particle;
                         }
                     }

@@ -1,4 +1,4 @@
-package ru.mipt;
+package ru.mipt.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,16 +6,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DaoClass {
-    // JDBC URL, username and password of MySQL server
     private static final String url = "jdbc:h2:~/test";
     private static final String user = "sa";
     private static final String password = "";
 
-    // JDBC variables for opening and managing connection
     private static Connection con;
     private static Statement stmt;
 
-    Connection getConnectiontoDb() {
+    public Connection getConnectiontoDb() {
         String query = "select name from particles";
 
         try {

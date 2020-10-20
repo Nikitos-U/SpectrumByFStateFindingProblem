@@ -1,4 +1,6 @@
-package ru.mipt;
+package ru.mipt.parsers;
+
+import ru.mipt.Particle;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -6,8 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class ParticleParser {
-    FileReader inputFile = new FileReader("src/ru/mipt/particles.txt");
-    BufferedReader reader = new BufferedReader(inputFile);
+    private FileReader inputFile = new FileReader("src/main/resources/particles.txt");
+    private BufferedReader reader = new BufferedReader(inputFile);
 
     public ParticleParser() throws FileNotFoundException {
     }
@@ -17,7 +19,7 @@ public class ParticleParser {
         List particles = new ArrayList();
         String line;
         while (!(line = reader.readLine()).startsWith(" -")) {
-            Double mass = Double.parseDouble(line.split("\\|")[4].trim().split(" ")[0]);
+            double mass = Double.parseDouble(line.split("\\|")[4].trim().split(" ")[0]);
             String multiplier = line.split("\\|")[4].trim().split(" ")[1].trim();
             switch (multiplier.charAt(0)) {
                 case ('e'):
@@ -40,7 +42,7 @@ public class ParticleParser {
             if(!line.split("\\|")[7].trim().equals("unknown")){
                 particle.setAlias(line.split("\\|")[7].trim());
             }
-            parsedParticles.put(particle.name, particle);
+            parsedParticles.put(particle.getName(), particle);
         }
         return parsedParticles;
     }

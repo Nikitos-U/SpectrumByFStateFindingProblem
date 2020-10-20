@@ -17,15 +17,15 @@ public class ProbableParticlesMaker {
         for (String s : parsedDecays.keySet()) {
             String s1 = s.split(":")[1];
             String tmp = s.split(" ")[1];
-            Integer counter = 0;
+            int counter = 0;
             if (Integer.parseInt(tmp) == particles.size()) {
                 for (Particle particle : particles) {
-                    if (s1.contains(particle.name) || s1.contains(particle.alias)) {
+                    if (s1.contains(particle.getName()) || s1.contains(particle.getAlias())) {
                         counter++;
                     }
                 }
                 if (counter == particles.size()) {
-                    probableParticles.put(parsedDecays.get(s).motherParticle, parsedDecays.get(s));
+                    probableParticles.put(parsedDecays.get(s).getMotherParticle(), parsedDecays.get(s));
                 }
             }
         }

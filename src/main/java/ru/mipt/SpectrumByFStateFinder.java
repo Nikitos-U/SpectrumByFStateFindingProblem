@@ -1,5 +1,10 @@
 package ru.mipt;
 
+import ru.mipt.dao.DaoClass;
+import ru.mipt.dao.FstateRepository;
+import ru.mipt.parsers.DecayParser;
+import ru.mipt.parsers.ParticleParser;
+
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,9 +24,9 @@ public class SpectrumByFStateFinder {
         //значением сама частица (объект класса Particle)
         for (String s : particles.keySet()) {
             String query;
-            String name = particles.get(s).name;
-            String alias = particles.get(s).alias;
-            Double mass = particles.get(s).mass;
+            String name = particles.get(s).getName();
+            String alias = particles.get(s).getAlias();
+            Double mass = particles.get(s).getMass();
             query = "INSERT INTO PARTICLES VALUES(" + "'" + name + "'," + "'"  + alias + "'," + mass + ");";
             FstateRepository.executeUpdate(query, connection);
         }
@@ -34,20 +39,18 @@ public class SpectrumByFStateFinder {
         while (!inputParticle.equals("exit")) {
             inputParticle = scanner.nextLine();
             for (Particle particle : particles.values()) {
-                if (particle.alias.equals(inputParticle) || particle.name.equals(inputParticle)) {
-                    fstate.particleList.add(particle);
+                if (particle.getAlias().equals(inputParticle) || particle.getName().equals(inputParticle)) {
+                    fstate.getParticleList().add(particle);
                 }
             }
         }
-        Double fstateMass = MassCounter.countMass(fstate.particleList);
+        Double fstateMass = MassCounter.countMass(fstate.getParticleList());
         System.out.println("fstateMass = " + fstateMass + " keV");
         ParticleCombinator combinator = new ParticleCombinator(particles);
         DecayParser decayParser = new DecayParser();
         decays = decayParser.parse(particles);
         System.out.println("Decays parsed: " + decays.size());
         long time = System.currentTimeMillis();
-        //System.out.println(decays.get("B0:K0,K~0,K~0,K+,pi- 5"));
-        //System.out.println(decays.keySet());
         ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
         DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
         ArrayList<Cascade> finalCascades;
@@ -62,7 +65,7 @@ public class SpectrumByFStateFinder {
         } else {
             System.out.println(" cascade");
         }
-        System.out.print("Cascades for " + fstate.particleList.size() + " particles found in: ");
+        System.out.print("Cascades for " + fstate.getParticleList().size() + " particles found in: ");
         System.out.print(System.currentTimeMillis() - time);
         System.out.println(" millis");
     }

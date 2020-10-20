@@ -1,11 +1,9 @@
-package ru.mipt.Tests;
-
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.mipt.*;
+import ru.mipt.parsers.DecayParser;
+import ru.mipt.parsers.ParticleParser;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -14,7 +12,7 @@ public class TestProbableParticlesMaker {
     public HashMap<String, Decay> decays;
 
     @Test
-    public void testForTwoParticles() throws IOException {
+    void testForTwoParticles() throws IOException {
         ParticleParser particleParser = new ParticleParser();
         HashMap<String, Particle> particles;
         particles = particleParser.parse();
@@ -37,7 +35,7 @@ public class TestProbableParticlesMaker {
     }
 
     @Test
-    public void testCaseParticlesCanNotBeConcated() throws IOException {
+    void testCaseParticlesCanNotBeConcated() throws IOException {
         ParticleParser particleParser = new ParticleParser();
         HashMap<String, Particle> particles;
         particles = particleParser.parse();

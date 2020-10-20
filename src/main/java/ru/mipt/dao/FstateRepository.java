@@ -1,13 +1,13 @@
-package ru.mipt;
+package ru.mipt.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-class FstateRepository {
+public class FstateRepository {
     private static Statement stmt;
 
-    static void executeUpdate(String query, Connection con) throws SQLException {
+    public static void executeUpdate(String query, Connection con) throws SQLException {
         stmt = con.createStatement();
         stmt.executeUpdate(query);
     }
