@@ -3,20 +3,17 @@ package ru.mipt.parsers;
 import ru.mipt.Particle;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ParticleParser {
-    private FileReader inputFile = new FileReader("src/main/resources/particles.txt");
-    private BufferedReader reader = new BufferedReader(inputFile);
+    private final FileReader inputFile = new FileReader("src/main/resources/particles.txt");
+    private final BufferedReader reader = new BufferedReader(inputFile);
 
     public ParticleParser() throws FileNotFoundException {
     }
 
     public HashMap<String, Particle> parse() throws IOException {
         HashMap<String, Particle> parsedParticles = new HashMap<>();
-        List particles = new ArrayList();
         String line;
         while (!(line = reader.readLine()).startsWith(" -")) {
             double mass = Double.parseDouble(line.split("\\|")[4].trim().split(" ")[0]);

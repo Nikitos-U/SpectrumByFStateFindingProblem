@@ -5,8 +5,7 @@ import java.util.HashMap;
 
 public class ParticleCombinator {
     private ArrayList<String> result1 = new ArrayList<>();
-    private HashMap<String, Particle> parsedParticles = new HashMap<>();
-    private Integer fstateSize = 0;
+    private final HashMap<String, Particle> parsedParticles;
 
     public ParticleCombinator(HashMap<String, Particle> parsedParticles) {
         this.parsedParticles = parsedParticles;
@@ -14,12 +13,12 @@ public class ParticleCombinator {
 
     private ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
         if (len == 0) {
-            String s = "";
-            for (int i = 0; i < result.length; i++) {
-                s += " " + result[i];
+            StringBuilder s = new StringBuilder();
+            for (String value : result) {
+                s.append(" ").append(value);
             }
-            result1.add(s);
-            s = "";
+            result1.add(s.toString());
+            s = new StringBuilder();
             return result1;
         }
         for (int i = startPosition; i <= fstate.size() - len; i++) {
@@ -30,11 +29,11 @@ public class ParticleCombinator {
     }
 
     ArrayList<Cascade> allCombinations(Cascade cascade, ProbableParticlesMaker probableParticlesMaker) {
-        ArrayList<String> fstateCombination = new ArrayList<>();
+        ArrayList<String> fstateCombination;
         ArrayList<String> fstate = new ArrayList<>();
         ArrayList<ArrayList<Particle>> result = new ArrayList<>();
         ArrayList<Cascade> cascades = new ArrayList<>();
-        fstateSize = cascade.getParticleList().size();
+        int fstateSize = cascade.getParticleList().size();
         result1 = new ArrayList<>();
         for (Particle particle : cascade.getParticleList()) {
             ArrayList<Particle> preParticles = new ArrayList<>();
@@ -44,7 +43,6 @@ public class ParticleCombinator {
         }
         System.out.println("Processing this fstate: " + fstate);
         for (int i = 2; i <= fstate.size(); i++) {
-            fstateCombination = new ArrayList<>();
             fstateCombination = combinations2(fstate, i, 0, new String[i]);
             for (String s : fstateCombination) {
                 ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
@@ -56,7 +54,7 @@ public class ParticleCombinator {
                     }
                 }
                 if (!possibleDecayParticles.containsAll(cascade.getParticleList())) {
-                    Integer counter = possibleDecayParticles.size();
+                    int counter = possibleDecayParticles.size();
                     while (counter < fstateSize) {
                         if (!probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).isEmpty()) {
                             for (Decay decay : probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).values()) {
