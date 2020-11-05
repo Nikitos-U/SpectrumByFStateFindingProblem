@@ -45,7 +45,7 @@ Decay K_S0
 Enddecay
 Decay K0
 0.500     K_L0                              PHSP;
-0.500     K_S0                              PHSP;
+0.500     K_S0  pi0                             PHSP; //
 Enddecay
 Decay anti-K0
 0.500     K_L0                              PHSP;
@@ -71,24 +71,6 @@ Decay K*-
 0.3323      K-  pi0                        VSS;
 0.0020      K-  gamma                       VSP_PWAVE;
 Enddecay
-Decay K*L
-1.0000      pi0 K_L0                       VSS;
-Enddecay
-Decay K*S
-1.0000      pi0 K_S0                       VSS;
-Enddecay
-Decay K*BL
-1.0000      pi0 K_L0                       VSS;
-Enddecay
-Decay K*BS
-1.0000      pi0 K_S0                       VSS;
-Enddecay
-Decay K*0T
-1.0000      pi- K+                        VSS;
-Enddecay
-Decay anti-K*0T
-1.0000      pi+ K-                        VSS;
-Enddecay
 Decay K_0*+
 0.6667      K0  pi+                       PHSP;
 0.3333      K+  pi0                       PHSP;
@@ -101,15 +83,9 @@ Decay K_0*0
 0.6667      K+  pi-                       PHSP;
 0.3333      K0  pi0                       PHSP;
 Enddecay
-Decay K_0*0N
-1.0000      K0  pi0                       PHSP;
-Enddecay
 Decay anti-K_0*0
 0.6667      K-  pi+                       PHSP;
 0.3333      anti-K0   pi0                 PHSP;
-Enddecay
-Decay anti-K_0*0N
-1.0000      anti-K0   pi0                 PHSP;
 Enddecay
 Decay K_10
 0.2800   rho-  K+                        VVS_PWAVE 1.0 0.0 0.0 0.0 0.0 0.0;
@@ -120,5 +96,31 @@ Decay K_10
 0.1444   K0    pi+ pi-                   PHSP;
 0.1244   K+    pi- pi0                   PHSP;
 0.0412   K0    pi0 pi0                   PHSP;
+Enddecay
+Decay TestParticlePairs
+0.033 particle1 particle2                 sadlsdj;
+0.2112 particle1 particle3               asdasda;
+0.2112 particle1 particle4               asdasda;
+0.2112 particle2 particle3               asdasda;
+0.2112 particle2 particle4               asdasda;
+0.2112 particle3 particle4               asdasda;
+Enddecay
+Decay TestParticleThrees
+0.123321 particle1 particle2 particle3        lkasjdlkjsad;
+0.123321 particle1 particle2 particle4        lkasjdlkjsad;
+0.123321 particle1 particle3 particle4        lkasjdlkjsad;
+0.123321 particle2 particle3 particle4        lkasjdlkjsad;
+Enddecay
+Decay TestParticleFours
+0.213213 particle1 particle2 particle3 particle4    jlkasjdlk;
+Enddecay
+Decay TestParticleTwoPairs
+0.1232 TestParticlePairs TestParticlePairs    asdasd;
+Enddecay
+Decay TestParticleThreeAndOne
+0.123321 TestParticleThrees particle1        asdasd;
+0.123321 TestParticleThrees particle2        asdasd;
+0.123321 TestParticleThrees particle3        asdasd;
+0.123321 TestParticleThrees particle4        asdasd;
 Enddecay
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
