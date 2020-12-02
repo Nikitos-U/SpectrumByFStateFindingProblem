@@ -17,10 +17,10 @@ class TestDecayParser {
     TestDecayParser() throws IOException {
     }
 
-    @Test
-    void TestDecaysNumber()  {
-        Assertions.assertEquals(75, decays.size());
-    }
+//    @Test
+//    void TestDecaysNumber()  {
+//        Assertions.assertEquals(75, decays.size());
+//    }
 
     @Test
     void TestForSomeDecayPresenceInTheList() {
