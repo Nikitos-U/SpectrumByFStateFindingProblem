@@ -44,8 +44,7 @@ public class SpectrumByFStateFinder {
                 }
             }
         }
-        Double fstateMass = MassCounter.countMass(fstate.getParticleList());
-        System.out.println("fstateMass = " + fstateMass + " keV");
+        System.out.println("fstateMass = " + fstate.getMass() + " keV");
         ParticleCombinator combinator = new ParticleCombinator(particles);
         DecayParser decayParser = new DecayParser();
         decays = decayParser.parse(particles);

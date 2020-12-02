@@ -7,8 +7,8 @@ import java.util.ArrayList;
 @Getter
 public class Decay {
     private final ArrayList<Particle> particles;
-    private Particle motherParticle; // Particle
-    private Double probability = 0.0;
+    private final Particle motherParticle;
+    private final Double probability;
     private Double mass = 0.0;
 // TODO charge conjugation method
     public Decay(Particle motherParticle, ArrayList<Particle> particles, Double probability) {

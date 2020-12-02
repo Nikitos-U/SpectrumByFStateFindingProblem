@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ProbableParticlesMaker {
-    private HashMap<String, Decay> parsedDecays;
+    private final HashMap<String, Decay> parsedDecays;
 
 
     public ProbableParticlesMaker(HashMap<String, Decay> parsedDecays) {
