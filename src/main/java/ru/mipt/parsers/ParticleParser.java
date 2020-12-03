@@ -41,7 +41,6 @@ public class ParticleParser {
                 String alias2 = line.split("\\s+")[2].trim();
                 if (parsedParticles.get(alias1) == null) {
                     if (parsedParticles.get(alias2) != null) {
-                        Particle particle = parsedParticles.get(alias2);
                         parsedParticles.get(alias2).getAliases().add(alias1);
                     }
                 } else {
