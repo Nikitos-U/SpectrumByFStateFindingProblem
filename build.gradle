@@ -1,12 +1,11 @@
 apply plugin: 'java'
+apply plugin: 'application'
 
-group = 'ru.mipt'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = JavaVersion.VERSION_11
+mainClassName = 'ru.mipt.SpectrumByFStateFinder'
 
 repositories {
+    mavenLocal()
     mavenCentral()
-
     maven {
         url "https://plugins.gradle.org/m2/"
     }
@@ -21,6 +20,11 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
 
+}
+
+jar {
+    baseName = 'gs-gradle'
+    version =  '0.1.0'
 }
 
 buildscript {
@@ -38,6 +42,3 @@ buildscript {
 test {
     useJUnitPlatform()
 }
-
-
-apply plugin: "me.champeau.gradle.jmh"
