@@ -2,6 +2,7 @@ package ru.mipt.parsers;
 
 import ru.mipt.Decay;
 import ru.mipt.Particle;
+import ru.mipt.utils.DoubleKeyHashMap;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -22,8 +23,8 @@ public class DecayParser {
         this.parsedParticles = parsedParticles;
     }
 
-    public HashMap<String, Decay> parse() throws IOException {
-        HashMap<String, Decay> parsedDecays = new HashMap<>();
+    public DoubleKeyHashMap parse() throws IOException {
+        DoubleKeyHashMap parsedDecays = new DoubleKeyHashMap();
         String line;
         String decayName;
         StringBuilder hashKeyParticles = new StringBuilder();
@@ -53,8 +54,9 @@ public class DecayParser {
                     }
                     Decay someDecay = new Decay(motherParticle, particles, probability);
                     hashKeyParticles = new StringBuilder(hashKeyParticles.substring(0, hashKeyParticles.length() - 1));
-                    hashKeyParticles.append(" ").append(particles.size());
-                    parsedDecays.put(hashKeyParticles.toString(), someDecay);
+//                    hashKeyParticles.append(" ").append(particles.size());
+                    parsedDecays.putByFirstKey(hashKeyParticles.toString(), someDecay);
+                    parsedDecays.addMotherParticle(motherParticle, particles.toString());
                     hashKeyParticles = new StringBuilder();
                     line = reader.readLine().trim();
                 }

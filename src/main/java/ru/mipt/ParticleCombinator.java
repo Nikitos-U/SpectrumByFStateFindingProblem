@@ -41,7 +41,7 @@ public class ParticleCombinator {
             preParticles.add(particle);
             result.add(preParticles);
         }
-        System.out.println("Processing this fstate: " + fstate);
+//        System.out.println("Processing this fstate: " + fstate);
         for (int i = 2; i <= fstate.size(); i++) {
             fstateCombination = combinations2(fstate, i, 0, new String[i]);
             for (String s : fstateCombination) {
@@ -91,11 +91,11 @@ public class ParticleCombinator {
                 possibleDecayParticles.clear();
             }
         }
-        System.out.println("++++++++++++++++++++++++++++++++Result combinations:++++++++++++++++++++++++++++++++");
-        for (Cascade cascade1 : cascades) {
-            System.out.println(cascade1);
-        }
-        System.out.println("++++++++++++++++++++++++++++++++END++++++++++++++++++++++++++++++++");
+//        System.out.println("++++++++++++++++++++++++++++++++Result combinations:++++++++++++++++++++++++++++++++");
+//        for (Cascade cascade1 : cascades) {
+//            System.out.println(cascade1);
+//        }
+//        System.out.println("++++++++++++++++++++++++++++++++END++++++++++++++++++++++++++++++++");
         return cascades;
     }
 }

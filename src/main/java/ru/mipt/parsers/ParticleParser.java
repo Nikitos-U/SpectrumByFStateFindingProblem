@@ -24,7 +24,7 @@ public class ParticleParser {
             double mass = parseMass(line);
             Particle particle = new Particle(line.split("\\|")[1].trim(), mass);
             if (!line.split("\\|")[7].trim().equals("unknown")) {
-                particle.getAliases().add(line.split("\\|")[7].trim());
+                particle.addAlias(line.split("\\|")[7].trim());
             }
             parsedParticles.put(particle.getName(), particle);
         }
@@ -41,10 +41,10 @@ public class ParticleParser {
                 String alias2 = line.split("\\s+")[2].trim();
                 if (parsedParticles.get(alias1) == null) {
                     if (parsedParticles.get(alias2) != null) {
-                        parsedParticles.get(alias2).getAliases().add(alias1);
+                        parsedParticles.get(alias2).addAlias(alias1);
                     }
                 } else {
-                    parsedParticles.get(alias1).getAliases().add(alias2);
+                    parsedParticles.get(alias1).addAlias(alias2);
                 }
             }
         }

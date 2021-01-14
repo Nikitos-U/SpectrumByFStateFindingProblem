@@ -17,6 +17,12 @@ public class Particle {
         this.aliases.add(name);
     }
 
+    public void addAlias(String alias){
+        if (!aliases.contains(alias)){
+            aliases.add(alias);
+        }
+    }
+
     @Override
     public String toString() {
         return this.name;

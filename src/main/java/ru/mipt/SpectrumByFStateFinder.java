@@ -4,6 +4,7 @@ import ru.mipt.dao.DaoClass;
 import ru.mipt.dao.FstateRepository;
 import ru.mipt.parsers.DecayParser;
 import ru.mipt.parsers.ParticleParser;
+import ru.mipt.utils.DoubleKeyHashMap;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -18,26 +19,28 @@ public class SpectrumByFStateFinder {
         ParticleParser particleParser = new ParticleParser();
         HashMap<String, Particle> particles;
         particles = particleParser.parse();
-        HashMap<String, Decay> decays;
+        DoubleKeyHashMap decays;
         DecayParser decayParser = new DecayParser(particles);
         ParticleCombinator combinator = new ParticleCombinator(particles);
         Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0);
         particles.put("FAKE_MOTHER_PARTICLE_ADD_ALIAS", fake_mother_particle);
         decays = decayParser.parse();
-        System.out.println("parsed: " + decays.keySet().size() + " decays");
-        DaoClass DaoClass = new DaoClass();
-        Connection connection = DaoClass.getConnectiontoDb();
-        //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
-        //значением сама частица (объект класса Particle)
-        for (String s : particles.keySet()) {
-            String query;
-            String name = particles.get(s).getName();
-            String alias = particles.get(s).getAliases().toString();
-            Double mass = particles.get(s).getMass();
-            query = "INSERT INTO PARTICLES VALUES(" + "'" + name + "'," + "'"  + alias + "'," + mass + ");";
-            FstateRepository.executeUpdate(query, connection);
-        }
-        connection.close();
+//        decays.getKey1Map().keySet().forEach(System.out::println);
+        System.out.println("second index contains: " + decays.getKey2Map().keySet().size() + " keys");
+        System.out.println("parsed: " + decays.getKey1Map().keySet().size() + " decays");
+//        DaoClass DaoClass = new DaoClass();
+//        Connection connection = DaoClass.getConnectiontoDb();
+//        //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
+//        //значением сама частица (объект класса Particle)
+//        for (String s : particles.keySet()) {
+//            String query;
+//            String name = particles.get(s).getName();
+//            String alias = particles.get(s).getAliases().toString();
+//            Double mass = particles.get(s).getMass();
+//            query = "INSERT INTO PARTICLES VALUES(" + "'" + name + "'," + "'"  + alias + "'," + mass + ");";
+//            FstateRepository.executeUpdate(query, connection);
+//        }
+//        connection.close();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter final state");
         Cascade fstate = new Cascade();
@@ -51,11 +54,12 @@ public class SpectrumByFStateFinder {
             }
         }
         System.out.println("fstateMass = " + fstate.getMass() + " keV");
-        long time = System.currentTimeMillis();
         ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
         DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
         ArrayList<Cascade> finalCascades;
+        long time = System.currentTimeMillis();
         finalCascades = decaysFinder.findDecays(fstate);
+        long finishTime = System.currentTimeMillis() - time;
         System.out.println("_______________FINAL RESULT_______________");
         for (Cascade cascade : finalCascades) {
             System.out.println(cascade);
@@ -67,7 +71,7 @@ public class SpectrumByFStateFinder {
             System.out.println(" cascade");
         }
         System.out.print("Cascades for " + fstate.getParticleList().size() + " particles found in: ");
-        System.out.print(System.currentTimeMillis() - time);
+        System.out.print(finishTime);
         System.out.println(" millis");
     }
 }
