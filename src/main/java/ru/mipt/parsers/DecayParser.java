@@ -2,20 +2,23 @@ package ru.mipt.parsers;
 
 import ru.mipt.Decay;
 import ru.mipt.Particle;
+import ru.mipt.dao.DaoConfig;
+import ru.mipt.dao.DecayEntry;
+import ru.mipt.dao.DecayRepository;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.sql.Array;
+import java.util.*;
 
 public class DecayParser {
     private final FileReader inputFile = new FileReader("src/main/resources/DECAY.DEC");
     private final BufferedReader reader = new BufferedReader(inputFile);
     private final List<String> models = new ArrayList<>(Arrays.asList("PHSP", "PHSP;", "PHSP; ", "HELAMP", "ISGW2;", "PHOTOS", "SVS", "SVS;", "SVV_HELAMP", "PYTHIA", "HQET2", "HQET2;", "ISGW2;", "VVS_PWAVE", "TAUSCALARNU", "VSP_PWAVE;", "VUB", "VUB;", "BTOXSGAMMA", "SLN;", "SLN", "CB3PI-MPP", "VSS", "VSS;", "VSS; ", "VSS_BMIX", "VVPIPI;", "VVPIPI;2", "PARTWAVE", "BTO3PI_CP", "CB3PI-P00", "STS;", "SVP_HELAMP", "BTOSLLALI;", "TAUSCALARNU;", "TAUHADNU", "TAUVECTORNU;", "D_DALITZ;", "D_DALITZ;", "PARTWAVE", "PI0_DALITZ;", "ETA_DALITZ;", "OMEGA_DALITZ;", "SVP_HELAMP", "VVPIPI;", "PARTWAVE", "VVP", "VLL;", "BaryonPCR", "TSS;", "TVS_PWAVE"));
+    private final DaoConfig config = new DaoConfig();
+    private final DecayRepository repository = new DecayRepository(config.getNamedParameterJdbcTemplate());
 
     public DecayParser() throws FileNotFoundException {
     }
@@ -61,6 +64,7 @@ public class DecayParser {
                     hashKeyParticles = new StringBuilder(hashKeyParticles.substring(0, hashKeyParticles.length() - 1));
                     hashKeyParticles.append(" ").append(particles.size());
                     parsedDecays.put(hashKeyParticles.toString(), someDecay);
+                    repository.save(new DecayEntry((Array) someDecay.getParticles(), someDecay.getMotherParticle(), someDecay.getProbability(), someDecay.getMass()));
                     hashKeyParticles = new StringBuilder();
                     line = reader.readLine().trim();
                 }

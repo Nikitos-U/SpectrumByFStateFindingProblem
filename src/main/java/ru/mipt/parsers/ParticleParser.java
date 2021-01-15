@@ -1,6 +1,9 @@
 package ru.mipt.parsers;
 
 import ru.mipt.Particle;
+import ru.mipt.dao.DaoConfig;
+import ru.mipt.dao.ParticleEntry;
+import ru.mipt.dao.ParticleRepository;
 
 import java.io.*;
 import java.util.HashMap;
@@ -8,6 +11,8 @@ import java.util.HashMap;
 public class ParticleParser {
     private final FileReader inputFile = new FileReader("src/main/resources/particles.txt");
     private final BufferedReader reader = new BufferedReader(inputFile);
+    private final DaoConfig config = new DaoConfig();
+    private final ParticleRepository repository = new ParticleRepository(config.getNamedParameterJdbcTemplate());
 
     public ParticleParser() throws FileNotFoundException {
     }
@@ -38,8 +43,11 @@ public class ParticleParser {
             Particle particle = new Particle(line.split("\\|")[1].trim(), mass);
             if(!line.split("\\|")[7].trim().equals("unknown")){
                 particle.setAlias(line.split("\\|")[7].trim());
+            } else {
+                particle.setAlias(particle.getName());
             }
             parsedParticles.put(particle.getName(), particle);
+            repository.save(new ParticleEntry(particle.getName(), particle.getAlias(), particle.getMass()));
         }
         return parsedParticles;
     }

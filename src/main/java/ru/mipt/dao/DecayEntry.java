@@ -1,15 +1,20 @@
 package ru.mipt.dao;
 
 
-import lombok.Value;
-import ru.mipt.Particle;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.ArrayList;
+import java.sql.Array;
 
-@Value
+@Getter
+@Setter
+@AllArgsConstructor
+@ToString
 public class DecayEntry {
-    ArrayList<Particle> particles;
-    Particle motherParticle;
-    Double probability;
-    Double mass = 0.0;
+    private Array particles;
+    private Object motherParticle;
+    private Double probability;
+    private Double mass = 0.0;
 }
