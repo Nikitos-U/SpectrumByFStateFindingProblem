@@ -21,11 +21,10 @@ public class DBFiller {
     public DBFiller(DecayParser decayParse, ParticleParser particleParser) {
         this.decayParser = decayParse;
         this.particleParser = particleParser;
-        parse();
     }
 
     @SneakyThrows
-    private void parse() {
+    public void parse() {
         this.particles = particleParser.parse();
         this.decays = decayParser.parse(this.particles);
     }

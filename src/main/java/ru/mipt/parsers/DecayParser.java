@@ -10,8 +10,10 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.sql.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class DecayParser {
     private final FileReader inputFile = new FileReader("src/main/resources/DECAY.DEC");
@@ -56,7 +58,7 @@ public class DecayParser {
                     hashKeyParticles = new StringBuilder(hashKeyParticles.substring(0, hashKeyParticles.length() - 1));
                     hashKeyParticles.append(" ").append(particles.size());
                     parsedDecays.put(hashKeyParticles.toString(), someDecay);
-                    repository.save(new DecayEntry((Array) someDecay.getParticles(), someDecay.getMotherParticle(), someDecay.getProbability(), someDecay.getMass()));
+                    repository.save(new DecayEntry(someDecay.getParticles().toString(), someDecay.getMotherParticle().toString(), someDecay.getProbability(), someDecay.getMass()));
                     hashKeyParticles = new StringBuilder();
                     line = reader.readLine().trim();
                 }

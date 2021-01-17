@@ -1,14 +1,17 @@
 package ru.mipt;
 
+import ru.mipt.dao.DaoConfig;
+import ru.mipt.dao.ParticleRepository;
+
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Objects;
 
 public class ParticleCombinator {
     private ArrayList<String> result1 = new ArrayList<>();
-    private final HashMap<String, Particle> parsedParticles;
+    private final DaoConfig config = new DaoConfig();
+    private final ParticleRepository repository = new ParticleRepository(config.getNamedParameterJdbcTemplate());
 
-    public ParticleCombinator(HashMap<String, Particle> parsedParticles) {
-        this.parsedParticles = parsedParticles;
+    public ParticleCombinator() {
     }
 
     private ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
@@ -45,13 +48,10 @@ public class ParticleCombinator {
         for (int i = 2; i <= fstate.size(); i++) {
             fstateCombination = combinations2(fstate, i, 0, new String[i]);
             for (String s : fstateCombination) {
+                s = s.substring(1);
                 ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
                 for (int j = 0; j < s.split("\\s+").length; j++) {
-                    for (Particle particle : parsedParticles.values()) {
-                        if (particle.getAliases().contains(s.split("\\s+")[j].trim())) {
-                            possibleDecayParticles.add(particle);
-                        }
-                    }
+                    possibleDecayParticles.add(Objects.requireNonNull(repository.findByName(s.split("\\s+")[j].trim())));
                 }
                 if (!possibleDecayParticles.containsAll(cascade.getParticleList())) {
                     int counter = possibleDecayParticles.size();

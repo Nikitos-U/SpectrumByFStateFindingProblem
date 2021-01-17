@@ -2,14 +2,13 @@ package ru.mipt;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 @Data
 @AllArgsConstructor
-@RequiredArgsConstructor
-public class Particle {
+public class Particle implements Serializable {
     private final String name;
     private ArrayList<String> aliases = new ArrayList<>();
     private final Double mass;

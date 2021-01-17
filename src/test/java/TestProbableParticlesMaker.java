@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ru.mipt.*;
+import ru.mipt.Decay;
+import ru.mipt.Particle;
+import ru.mipt.ProbableParticlesMaker;
 import ru.mipt.parsers.DecayParser;
 import ru.mipt.parsers.ParticleParser;
 
@@ -48,7 +50,7 @@ public class TestProbableParticlesMaker {
         Particle particle1 = particles.get("Xu-");
         Particle particle2 = particles.get("pi-");
         testParticles.addAll(Arrays.asList(particle1, particle2));
-        ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
+        ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker();
         resultParticles = (HashMap<Particle, Decay>) probableParticlesMaker.convertCombinationsToParticles(testParticles);
         result = resultParticles.keySet();
         Set<Particle> particlesForAssertion = new HashSet<>();

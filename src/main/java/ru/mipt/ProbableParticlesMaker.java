@@ -1,33 +1,32 @@
 package ru.mipt;
 
+import lombok.NoArgsConstructor;
+import ru.mipt.dao.DaoConfig;
+import ru.mipt.dao.DecayEntry;
+import ru.mipt.dao.DecayRepository;
+import ru.mipt.dao.ParticleRepository;
+
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@NoArgsConstructor
 public class ProbableParticlesMaker {
-    private final HashMap<String, Decay> parsedDecays;
-
-
-    public ProbableParticlesMaker(HashMap<String, Decay> parsedDecays) {
-        this.parsedDecays = parsedDecays;
-    }
+    private final DaoConfig config = new DaoConfig();
+    private final DecayRepository repository = new DecayRepository(config.getNamedParameterJdbcTemplate());
+    private final ParticleRepository particleRepository = new ParticleRepository(config.getNamedParameterJdbcTemplate());
 
     public Map<Particle, Decay> convertCombinationsToParticles(ArrayList<Particle> particles) {
         Map<Particle, Decay> probableParticles = new HashMap<>();
-        for (String s : parsedDecays.keySet()) {
-            String s1 = s.split(":")[1];
-            String tmp = s.split(" ")[1];
-            int counter = 0;
-            if (Integer.parseInt(tmp) == particles.size()) {
-                for (Particle particle : particles) {
-                    if (particle.getAliases().stream().anyMatch(s1::contains)) {
-                        counter++;
-                    }
-                }
-                if (counter == particles.size()) {
-                    probableParticles.put(parsedDecays.get(s).getMotherParticle(), parsedDecays.get(s));
-                }
+        List<DecayEntry> decayEntries = repository.findByParticles(particles);
+        for (DecayEntry decayEntry : decayEntries) {
+            Particle motherParticle = particleRepository.findByName(decayEntry.getMotherParticle());
+            ArrayList<Particle> decayParticles = new ArrayList<>();
+            for (String s : decayEntry.getParticles().substring(1, decayEntry.getParticles().length() - 1).split(", ")) {
+                decayParticles.add(particleRepository.findByName(s));
             }
+            probableParticles.put(motherParticle, new Decay(motherParticle, decayParticles, decayEntry.getProbability()));
         }
         return probableParticles;
     }

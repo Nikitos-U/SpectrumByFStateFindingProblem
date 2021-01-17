@@ -6,7 +6,9 @@ import ru.mipt.dao.DaoConfig;
 import ru.mipt.dao.ParticleEntry;
 import ru.mipt.dao.ParticleRepository;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashMap;
 
 
@@ -35,8 +37,10 @@ public class ParticleParser {
         }
         parseAliases(parsedParticles);
         for (Particle particle : parsedParticles.values()) {
-            repository.save(new ParticleEntry(particle.getName(), particle.getAliases(), particle.getMass()));
+            repository.save(new ParticleEntry(particle.getName(), particle.getAliases().toString(), particle.getMass()));
         }
+        Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0);
+        repository.save(new ParticleEntry(fake_mother_particle.getName(), fake_mother_particle.getAliases().toString(), fake_mother_particle.getMass()));
         return parsedParticles;
     }
 
