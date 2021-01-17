@@ -13,7 +13,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
+import static java.lang.System.nanoTime;
+
 public class SpectrumByFStateFinder {
+    public static long workingTime;
+
     //Основной класс из него вызываются парсеры и классы, исполняющие логику алгоритма
     public static void main(String[] args) throws IOException, SQLException {
         ParticleParser particleParser = new ParticleParser();
@@ -26,8 +30,8 @@ public class SpectrumByFStateFinder {
         particles.put("FAKE_MOTHER_PARTICLE_ADD_ALIAS", fake_mother_particle);
         decays = decayParser.parse();
 //        decays.getKey1Map().keySet().forEach(System.out::println);
-        System.out.println("second index contains: " + decays.getKey2Map().keySet().size() + " keys");
-        System.out.println("parsed: " + decays.getKey1Map().keySet().size() + " decays");
+//        System.out.println("second index contains: " + decays.getKey2Map().keySet().size() + " keys");
+//        System.out.println("parsed: " + decays.getKey1Map().keySet().size() + " decays");
 //        DaoClass DaoClass = new DaoClass();
 //        Connection connection = DaoClass.getConnectiontoDb();
 //        //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
@@ -42,36 +46,46 @@ public class SpectrumByFStateFinder {
 //        }
 //        connection.close();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter final state");
+//        System.out.println("Enter final state");
         Cascade fstate = new Cascade();
         String inputParticle = "";
-        while (!inputParticle.equals("exit")) {
-            inputParticle = scanner.nextLine();
-            for (Particle particle : particles.values()) {
-                if (particle.getAliases().contains(inputParticle)) {
-                    fstate.getParticleList().add(particle);
+        if (args.length == 0) {
+            while (!inputParticle.equals("exit")) {
+                inputParticle = scanner.nextLine();
+                for (Particle particle : particles.values()) {
+                    if (particle.getAliases().contains(inputParticle)) {
+                        fstate.getParticleList().add(particle);
+                    }
+                }
+            }
+        } else {
+            for (String arg : args) {
+                for (Particle particle : particles.values()) {
+                    if (particle.getAliases().contains(arg)) {
+                        fstate.getParticleList().add(particle);
+                    }
                 }
             }
         }
-        System.out.println("fstateMass = " + fstate.getMass() + " keV");
+//        System.out.println("fstateMass = " + fstate.getMass() + " keV");
         ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
         DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
         ArrayList<Cascade> finalCascades;
-        long time = System.currentTimeMillis();
+        long time = nanoTime();
         finalCascades = decaysFinder.findDecays(fstate);
-        long finishTime = System.currentTimeMillis() - time;
-        System.out.println("_______________FINAL RESULT_______________");
-        for (Cascade cascade : finalCascades) {
-            System.out.println(cascade);
-        }
-        System.out.print("Found " + finalCascades.size());
-        if (finalCascades.size() > 1) {
-            System.out.println(" cascades");
-        } else {
-            System.out.println(" cascade");
-        }
-        System.out.print("Cascades for " + fstate.getParticleList().size() + " particles found in: ");
-        System.out.print(finishTime);
-        System.out.println(" millis");
+        workingTime = nanoTime() - time;
+//        System.out.println("_______________FINAL RESULT_______________");
+//        for (Cascade cascade : finalCascades) {
+//            System.out.println(cascade);
+//        }
+//        System.out.print("Found " + finalCascades.size());
+//        if (finalCascades.size() > 1) {
+//            System.out.println(" cascades");
+//        } else {
+//            System.out.println(" cascade");
+//        }
+//        System.out.print("Cascades for " + fstate.getParticleList().size() + " particles found in: ");
+//        System.out.print(workingTime);
+//        System.out.println(" ns");
     }
 }
