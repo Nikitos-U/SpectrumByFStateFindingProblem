@@ -22,6 +22,8 @@ public class SpectrumByFStateFinder {
         DBFiller filler = new DBFiller(decayParser, particleParser);
         HashMap<String,Particle> particles = filler.getParticles();
         HashMap<String, Decay> decays = filler.getDecays();
+        Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0);
+        particles.put("FAKE_MOTHER_PARTICLE_ADD_ALIAS", fake_mother_particle);
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter final state");
         Cascade fstate = new Cascade();
@@ -29,7 +31,7 @@ public class SpectrumByFStateFinder {
         while (!inputParticle.equals("exit")) {
             inputParticle = scanner.nextLine();
             for (Particle particle : particles.values()) {
-                if (particle.getAlias().equals(inputParticle) || particle.getName().equals(inputParticle)) {
+                if (particle.getAliases().contains(inputParticle)) {
                     fstate.getParticleList().add(particle);
                 }
             }

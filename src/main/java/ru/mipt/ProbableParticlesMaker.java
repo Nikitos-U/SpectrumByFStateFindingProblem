@@ -20,7 +20,7 @@ public class ProbableParticlesMaker {
             int counter = 0;
             if (Integer.parseInt(tmp) == particles.size()) {
                 for (Particle particle : particles) {
-                    if (s1.contains(particle.getName()) || s1.contains(particle.getAlias())) {
+                    if (particle.getAliases().stream().anyMatch(s1::contains)) {
                         counter++;
                     }
                 }

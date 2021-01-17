@@ -48,7 +48,7 @@ public class ParticleCombinator {
                 ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
                 for (int j = 0; j < s.split("\\s+").length; j++) {
                     for (Particle particle : parsedParticles.values()) {
-                        if (particle.getAlias().equals(s.split("\\s+")[j].trim()) || particle.getName().equals(s.split("\\s+")[j].trim())) {
+                        if (particle.getAliases().contains(s.split("\\s+")[j].trim())) {
                             possibleDecayParticles.add(particle);
                         }
                     }
