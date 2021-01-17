@@ -9,7 +9,7 @@ public class DecaysFinder {
     ParticleCombinator particleCombinator;
     ProbableParticlesMaker probableParticlesMaker;
 
-    ArrayList<Cascade> findDecays(Cascade fstate) {
+    public ArrayList<Cascade> findDecays(Cascade fstate) {
         ArrayList<Cascade> finalCascades = new ArrayList<>();
         if (fstate.getParticleList().size() == 1) {
             finalCascades.add(fstate);
