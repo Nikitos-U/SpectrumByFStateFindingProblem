@@ -18,7 +18,7 @@ public class ParticleParser {
     private final BufferedReader reader = new BufferedReader(inputFile);
     private final BufferedReader decaysReader = new BufferedReader(decaysFile);
     private final DaoConfig config = new DaoConfig();
-    private final ParticleRepository repository = new ParticleRepository(config.getNamedParameterJdbcTemplate());
+    private final ParticleRepository repository = new ParticleRepository(config.getJdbcTemplate());
 
     public ParticleParser() throws FileNotFoundException {
     }

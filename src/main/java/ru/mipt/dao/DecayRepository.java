@@ -1,6 +1,7 @@
 package ru.mipt.dao;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,9 +14,8 @@ import static ru.mipt.dao.DecayColumns.*;
 
 @RequiredArgsConstructor
 public class DecayRepository {
-    private final NamedParameterJdbcTemplate template;
-    private final String insert = "INSERT INTO DECAYS(mother_particle, probability, mass, particles)" +
-            " VALUES (:mother_particle, :probability, :mass, :particles)";
+    private final JdbcTemplate template;
+    private final String create = "CREATE (n:DECAY {mother_particle:?, probability:?, mass:?, particles:?})";
     private final String get = "SELECT * FROM DECAYS where(PARTICLES = :particles)";
 
     private final static RowMapper<DecayEntry> DECAY_ENTRY_ROW_MAPPER = ((rs, rowNum) ->
@@ -23,14 +23,10 @@ public class DecayRepository {
                     rs.getString(MOTHER_PARTICLE.column()), rs.getDouble(PROBABILITY.column()), rs.getDouble(MASS.column())));
 
     public void save(DecayEntry entry) {
-        MapSqlParameterSource params = new MapSqlParameterSource(MOTHER_PARTICLE.param(), entry.getMotherParticle())
-                .addValue(MASS.param(), entry.getMass())
-                .addValue(PARTICLES.param(), entry.getParticles())
-                .addValue(PROBABILITY.param(), entry.getProbability());
-        template.update(insert, params);
+        template.update(create, entry.getMotherParticle(), entry.getMass(), entry.getParticles(), entry.getProbability());
     }
 
-    public List<DecayEntry> findByParticles(List<Particle> entry) {
-        return template.query(get, new MapSqlParameterSource(PARTICLES.param(), entry.toString()), DECAY_ENTRY_ROW_MAPPER);
-    }
+//    public List<DecayEntry> findByParticles(List<Particle> entry) {
+//        return template.query(get, new MapSqlParameterSource(PARTICLES.param(), entry.toString()), DECAY_ENTRY_ROW_MAPPER);
+//    }
 }
