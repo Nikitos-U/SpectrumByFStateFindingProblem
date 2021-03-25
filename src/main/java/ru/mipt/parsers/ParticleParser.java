@@ -27,9 +27,11 @@ public class ParticleParser {
     public HashMap<String, Particle> parse() {
         HashMap<String, Particle> parsedParticles = new HashMap<>();
         String line;
+        long i = 0L;
         while (!(line = reader.readLine()).startsWith(" -")) {
+            i++;
             double mass = parseMass(line);
-            Particle particle = new Particle(line.split("\\|")[1].trim(), mass);
+            Particle particle = new Particle(i, line.split("\\|")[1].trim(), mass);
             if (!line.split("\\|")[7].trim().equals("unknown")) {
                 particle.getAliases().add(line.split("\\|")[7].trim());
             }
@@ -37,10 +39,10 @@ public class ParticleParser {
         }
         parseAliases(parsedParticles);
         for (Particle particle : parsedParticles.values()) {
-            repository.save(new ParticleEntry(particle.getName(), particle.getAliases().toString(), particle.getMass()));
+            repository.saveParticle(new ParticleEntry(particle.getId(), particle.getName(), particle.getAliases().toString(), particle.getMass()));
         }
-        Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0);
-        repository.save(new ParticleEntry(fake_mother_particle.getName(), fake_mother_particle.getAliases().toString(), fake_mother_particle.getMass()));
+        Particle fake_mother_particle = new Particle( -1, "FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0);
+        repository.saveParticle(new ParticleEntry(fake_mother_particle.getId(), fake_mother_particle.getName(), fake_mother_particle.getAliases().toString(), fake_mother_particle.getMass()));
         return parsedParticles;
     }
 

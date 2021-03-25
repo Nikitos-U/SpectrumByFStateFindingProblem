@@ -10,6 +10,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @ToString
 public class ParticleEntry {
+    private long id;
     private String name;
     private String alias;
     private double mass;

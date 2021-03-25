@@ -1,5 +1,6 @@
 package ru.mipt.parsers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.mipt.Decay;
 import ru.mipt.Particle;
 import ru.mipt.dao.DaoConfig;
@@ -21,6 +22,7 @@ public class DecayParser {
     private final List<String> models = new ArrayList<>(Arrays.asList("PHSP", "PHSP;", "PHSP; ", "HELAMP", "ISGW2;", "PHOTOS", "SVS", "SVS;", "SVV_HELAMP", "PYTHIA", "HQET2", "HQET2;", "ISGW2;", "VVS_PWAVE", "TAUSCALARNU", "VSP_PWAVE;", "VUB", "VUB;", "BTOXSGAMMA", "SLN;", "SLN", "CB3PI-MPP", "VSS", "VSS;", "VSS; ", "VSS_BMIX", "VVPIPI;", "VVPIPI;2", "PARTWAVE", "BTO3PI_CP", "CB3PI-P00", "STS;", "SVP_HELAMP", "BTOSLLALI;", "TAUSCALARNU;", "TAUHADNU", "TAUVECTORNU;", "D_DALITZ;", "D_DALITZ;", "PARTWAVE", "PI0_DALITZ;", "ETA_DALITZ;", "OMEGA_DALITZ;", "SVP_HELAMP", "VVPIPI;", "PARTWAVE", "VVP", "VLL;", "BaryonPCR", "TSS;", "TVS_PWAVE"));
     private final DaoConfig config = new DaoConfig();
     private final DecayRepository repository = new DecayRepository(config.getJdbcTemplate());
+    private final ObjectMapper mapper = new ObjectMapper();
 
     public DecayParser() throws FileNotFoundException {
     }
@@ -43,7 +45,7 @@ public class DecayParser {
                     hashKeyParticles.append(decayName).append(":");
                     Double probability = Double.parseDouble(line.split(" ")[0].trim());
                     ArrayList<Particle> particles = parseDecayParticles(parsedParticles, hashKeyParticles, splittedLine);
-                    Particle motherParticle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0);
+                    Particle motherParticle = new Particle(-1,"FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0);
                     for (Particle particle : parsedParticles.values()) {
                         String finalDecayName = decayName;
                         if (particle.getAliases().stream().anyMatch(alias -> alias.equals(finalDecayName))) {
@@ -58,7 +60,7 @@ public class DecayParser {
                     hashKeyParticles = new StringBuilder(hashKeyParticles.substring(0, hashKeyParticles.length() - 1));
                     hashKeyParticles.append(" ").append(particles.size());
                     parsedDecays.put(hashKeyParticles.toString(), someDecay);
-                    repository.save(new DecayEntry(someDecay.getParticles().toString(), someDecay.getMotherParticle().toString(), someDecay.getProbability(), someDecay.getMass()));
+                    repository.save(new DecayEntry(mapper.writeValueAsString(someDecay.getParticles()), someDecay.getMotherParticle().toString(), someDecay.getProbability(), someDecay.getMass()));
                     hashKeyParticles = new StringBuilder();
                     line = reader.readLine().trim();
                 }
