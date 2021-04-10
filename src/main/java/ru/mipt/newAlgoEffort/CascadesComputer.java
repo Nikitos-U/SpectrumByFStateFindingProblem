@@ -1,10 +1,12 @@
 package ru.mipt.newAlgoEffort;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 import ru.mipt.Cascade;
 import ru.mipt.Decay;
 import ru.mipt.Particle;
-import ru.mipt.dao.FstateRepository;
+import ru.mipt.dao.DecayRepository;
+import ru.mipt.dao.ParticleRepository;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,37 +14,43 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
+@Component
 @AllArgsConstructor
 public class CascadesComputer {
-    private final List<Decay> motherParticles;
+    private final List<Particle> motherParticles;
 
-    public List<Cascade> computeCascades(List<Particle> fstate, FstateRepository repository, List<Cascade> cascades) {
+    public List<Decay> computeCascades(List<Particle> fstate, ParticleRepository particleRepository, DecayRepository decayRepository) {
         List<Decay> finalDecays;
         do {
-            finalDecays = motherParticlesCreator(fstate, repository, fstate);
+            finalDecays = motherParticlesCreator(fstate, particleRepository, decayRepository, fstate);
+            return finalDecays;
         } while (!finalDecays.isEmpty());
-        return toCascades(finalDecays);
     }
 
-    private List<Decay> motherParticlesCreator(List<Particle> fstate, FstateRepository repository, List<Particle> checkList) {
+    private List<Decay> motherParticlesCreator(List<Particle> fstate, ParticleRepository particleRepository, DecayRepository decayRepository, List<Particle> checkList) {
         try {
             motherParticles
                     .addAll(fstate.stream()
-                            .map(repository::getChilds)
+                            .map(particleRepository::getMothers)
                             .flatMap(Collection::stream)
                             .collect(toList()));
         } catch (RuntimeException e) {
             return Collections.emptyList();
         }
-        List<List<Particle>> childsOfmothers = motherParticles
+        List<Decay> decaysFromMothers = motherParticles
+                .stream()
+                .map(decayRepository::getMothersAsDecays)
+                .flatMap(Collection::stream)
+                .collect(toList());
+        List<List<Particle>> childsOfmothers = decaysFromMothers
                 .stream()
                 .map(Decay::getParticles)
                 .flatMap(Collection::stream)
-                .map(repository::getMothers).collect(toList());
+                .map(particleRepository::getMothers).collect(toList());
         childsOfmothers = checkParticles(childsOfmothers, checkList);
         List<Decay> decays = childsOfmothers
                 .stream()
-                .map(repository::getDecaysByParticles)
+                .map(decayRepository::getDecaysByParticles)
                 .flatMap(Collection::stream)
                 .collect(toList());
         List<Particle> stepMotherParticles = decays.stream().map(Decay::getMotherParticle).collect(toList());
@@ -55,6 +63,15 @@ public class CascadesComputer {
         return childsOfMothers;
     }
     private List<Cascade> toCascades(List<Decay> decays) {
+//        for (Decay decay : decays) {
+//            for (Particle particle : decay.getParticles()) {
+//                for (Decay decay1 : decays) {
+//                    if (decay1.getMotherParticle().equals(particle)) {
+//
+//                    }
+//                }
+//            }
+//        }
         return null;
     }
 }
