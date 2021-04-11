@@ -12,7 +12,7 @@ public class ProbableParticlesMaker {
         this.parsedDecays = parsedDecays;
     }
 
-    public Map<Particle, Decay> convertCombinationsToParticles(ArrayList<Particle> particles) {
+    public Map<Particle, Decay> combinationsToParticles(ArrayList<Particle> particles) {
         Map<Particle, Decay> probableParticles = new HashMap<>();
 //        for (String s : parsedDecays.getKey1Map().keySet()) {
 //            String s1 = s.split(":")[1];
