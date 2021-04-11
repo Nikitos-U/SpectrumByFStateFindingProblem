@@ -1,12 +1,9 @@
 package ru.mipt;
 
-import ru.mipt.dao.DaoClass;
-import ru.mipt.dao.FstateRepository;
 import ru.mipt.parsers.DecayParser;
 import ru.mipt.parsers.ParticleParser;
 
 import java.io.IOException;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,19 +22,19 @@ public class SpectrumByFStateFinder {
         particles.put("FAKE_MOTHER_PARTICLE_ADD_ALIAS", fake_mother_particle);
         decays = decayParser.parse();
         System.out.println("parsed: " + decays.keySet().size() + " decays");
-        DaoClass DaoClass = new DaoClass();
-        Connection connection = DaoClass.getConnectiontoDb();
-        //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
-        //значением сама частица (объект класса Particle)
-        for (String s : particles.keySet()) {
-            String query;
-            String name = particles.get(s).getName();
-            String alias = particles.get(s).getAliases().toString();
-            Double mass = particles.get(s).getMass();
-            query = "INSERT INTO PARTICLES VALUES(" + "'" + name + "'," + "'"  + alias + "'," + mass + ");";
-            FstateRepository.executeUpdate(query, connection);
-        }
-        connection.close();
+//        DaoClass DaoClass = new DaoClass();
+//        Connection connection = DaoClass.getConnectiontoDb();
+//        //распарс файла с частицами, в результате возвращается HashMap<String,Particle> - ключом является имя частицы,
+//        //значением сама частица (объект класса Particle)
+//        for (String s : particles.keySet()) {
+//            String query;
+//            String name = particles.get(s).getName();
+//            String alias = particles.get(s).getAliases().toString();
+//            Double mass = particles.get(s).getMass();
+//            query = "INSERT INTO PARTICLES VALUES(" + "'" + name + "'," + "'"  + alias + "'," + mass + ");";
+//            FstateRepository.executeUpdate(query, connection);
+//        }
+//        connection.close();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter final state");
         Cascade fstate = new Cascade();

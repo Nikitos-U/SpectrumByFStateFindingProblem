@@ -2,100 +2,90 @@ package ru.mipt;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ParticleCombinator {
-    private ArrayList<String> result1 = new ArrayList<>();
     private final HashMap<String, Particle> parsedParticles;
 
     public ParticleCombinator(HashMap<String, Particle> parsedParticles) {
         this.parsedParticles = parsedParticles;
     }
 
-    private ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
+    public ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
+        ArrayList<String> result1 = new ArrayList<>();
         if (len == 0) {
             StringBuilder s = new StringBuilder();
             for (String value : result) {
                 s.append(" ").append(value);
             }
             result1.add(s.toString());
-            s = new StringBuilder();
             return result1;
         }
         for (int i = startPosition; i <= fstate.size() - len; i++) {
             result[result.length - len] = fstate.get(i);
-            combinations2(fstate, len - 1, i + 1, result);
+            result1.addAll(combinations2(fstate, len - 1, i + 1, result));
         }
         return result1;
     }
 
     ArrayList<Cascade> allCombinations(Cascade cascade, ProbableParticlesMaker probableParticlesMaker) {
-        ArrayList<String> fstateCombination;
         ArrayList<String> fstate = new ArrayList<>();
-        ArrayList<ArrayList<Particle>> result = new ArrayList<>();
         ArrayList<Cascade> cascades = new ArrayList<>();
-        int fstateSize = cascade.getParticleList().size();
-        result1 = new ArrayList<>();
-        for (Particle particle : cascade.getParticleList()) {
-            ArrayList<Particle> preParticles = new ArrayList<>();
-            fstate.add(particle.getName());
-            preParticles.add(particle);
-            result.add(preParticles);
-        }
+        cascade.getParticleList().forEach(particle -> fstate.add(particle.getName()));
         System.out.println("Processing this fstate: " + fstate);
         for (int i = 2; i <= fstate.size(); i++) {
-            fstateCombination = combinations2(fstate, i, 0, new String[i]);
+            ArrayList<String> fstateCombination = combinations2(fstate, i, 0, new String[i]);
             for (String s : fstateCombination) {
-                ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
-                for (int j = 0; j < s.split("\\s+").length; j++) {
-                    for (Particle particle : parsedParticles.values()) {
-                        if (particle.getAliases().contains(s.split("\\s+")[j].trim())) {
-                            possibleDecayParticles.add(particle);
-                        }
-                    }
-                }
-                if (!possibleDecayParticles.containsAll(cascade.getParticleList())) {
+                ArrayList<Particle> possibleDecayParticles = stringToParticles(s);
+                Map<Particle, Decay> mpsFromCombinations = probableParticlesMaker.combinationsToParticles(possibleDecayParticles);
+                if (possibleDecayParticles.containsAll(cascade.getParticleList())) {
+                    mpsFromCombinations.values().stream()
+                            .map(decay -> createAndFillNewCascade(cascade, decay))
+                            .filter(formedCascade -> !cascades.contains(formedCascade))
+                            .forEach(cascades::add);
+                } else {
                     int counter = possibleDecayParticles.size();
-                    while (counter < fstateSize) {
-                        if (!probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).isEmpty()) {
-                            for (Decay decay : probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).values()) {
-                                Cascade formedCascade = new Cascade();
-                                formedCascade.getParticleList().add(decay.getMotherParticle());
-                                formedCascade.getHistory().add(decay);
-                                formedCascade.getHistory().addAll(cascade.getHistory());
-                                for (Particle particle : cascade.getParticleList()) {
-                                    if (!possibleDecayParticles.contains(particle)) {
-                                        formedCascade.getParticleList().add(particle);
-                                        counter++;
-                                    }
-                                }
-                                if (!cascades.contains(formedCascade)) {
-                                    cascades.add(formedCascade);
-                                }
-                            }
-                        } else {
+                    while (counter < fstate.size()) {
+                        if (mpsFromCombinations.isEmpty()) {
                             break;
                         }
-                    }
-                } else {
-                    for (Decay decay : probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).values()) {
-                        Cascade formedCascade = new Cascade();
-                        formedCascade.getParticleList().add(decay.getMotherParticle());
-                        formedCascade.getHistory().add(decay);
-                        formedCascade.getHistory().addAll(cascade.getHistory());
-                        if (!cascades.contains(formedCascade)) {
-                            cascades.add(formedCascade);
+                        for (Decay decay : mpsFromCombinations.values()) {
+                            Cascade formedCascade = createAndFillNewCascade(cascade, decay);
+                            counter += cascade.getParticleList().stream()
+                                    .filter(particle -> !possibleDecayParticles.contains(particle))
+                                    .map(particle -> formedCascade.getParticleList().add(particle))
+                                    .count();
+                            if (!cascades.contains(formedCascade)) {
+                                cascades.add(formedCascade);
+                            }
                         }
                     }
                 }
-                result.add(possibleDecayParticles);
                 possibleDecayParticles.clear();
             }
         }
         System.out.println("++++++++++++++++++++++++++++++++Result combinations:++++++++++++++++++++++++++++++++");
-        for (Cascade cascade1 : cascades) {
-            System.out.println(cascade1);
-        }
+        cascades.forEach(System.out::println);
         System.out.println("++++++++++++++++++++++++++++++++END++++++++++++++++++++++++++++++++");
         return cascades;
+    }
+
+    private ArrayList<Particle> stringToParticles(String s) {
+        ArrayList<Particle> possibleDecayParticles = new ArrayList<>();
+        for (int j = 0; j < s.split("\\s+").length; j++) {
+            int finalJ = j;
+            parsedParticles.values().stream()
+                    .filter(particle -> particle.getAliases().contains(s.split("\\s+")[finalJ].trim()))
+                    .forEach(possibleDecayParticles::add);
+        }
+        return possibleDecayParticles;
+    }
+
+    private Cascade createAndFillNewCascade(Cascade cascade, Decay decay) {
+        Cascade formedCascade = new Cascade();
+        formedCascade.getParticleList().add(decay.getMotherParticle());
+        formedCascade.getHistory().add(decay);
+        formedCascade.getHistory().addAll(cascade.getHistory());
+        return formedCascade;
     }
 }
