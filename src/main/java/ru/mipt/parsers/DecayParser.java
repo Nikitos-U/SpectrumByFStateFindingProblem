@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static java.lang.Double.parseDouble;
+
 public class DecayParser {
     private final FileReader inputFile = new FileReader("src/main/resources/DECAY.DEC");
     private final BufferedReader reader = new BufferedReader(inputFile);
@@ -39,9 +41,9 @@ public class DecayParser {
                     }
                     String[] splittedLine = line.split("\\s+");
                     hashKeyParticles.append(decayName).append(":");
-                    Double probability = Double.parseDouble(line.split(" ")[0].trim());
+                    Double probability = parseDouble(line.split(" ")[0].trim());
                     ArrayList<Particle> particles = parseDecayParticles(parsedParticles, hashKeyParticles, splittedLine);
-                    Particle motherParticle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0);
+                    Particle motherParticle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0, 0);
                     for (Particle particle : parsedParticles.values()) {
                         String finalDecayName = decayName;
                         if (particle.getAliases().stream().anyMatch(alias -> alias.equals(finalDecayName))) {
@@ -54,7 +56,6 @@ public class DecayParser {
                     }
                     Decay someDecay = new Decay(motherParticle, particles, probability);
                     hashKeyParticles = new StringBuilder(hashKeyParticles.substring(0, hashKeyParticles.length() - 1));
-//                    hashKeyParticles.append(" ").append(particles.size());
                     parsedDecays.putByFirstKey(hashKeyParticles.toString(), someDecay);
                     parsedDecays.addMotherParticle(motherParticle, particles.toString());
                     hashKeyParticles = new StringBuilder();

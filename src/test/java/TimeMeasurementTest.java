@@ -5,7 +5,10 @@ import ru.mipt.parsers.DecayParser;
 import ru.mipt.parsers.ParticleParser;
 import ru.mipt.utils.DoubleKeyHashMap;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.HashMap;
 
 import static java.lang.System.nanoTime;
@@ -15,7 +18,7 @@ public class TimeMeasurementTest {
     HashMap<String, Particle> particles = particleParser.parse();
     DecayParser decayParser = new DecayParser(particles);
     DoubleKeyHashMap decays = decayParser.parse();
-    Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0);
+    Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0, 0);
     ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
     ParticleCombinator combinator = new ParticleCombinator(particles);
     DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
