@@ -1,5 +1,7 @@
 package ru.mipt.newAlgoEffort;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -10,6 +12,14 @@ import ru.mipt.dao.ParticleRepository;
 
 @Configuration
 public class NewDaoConfig {
+
+    @Bean
+    public ObjectMapper mapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+        return mapper;
+    }
 
     @Bean
     public JdbcTemplate jdbcTemplate() {
@@ -25,8 +35,8 @@ public class NewDaoConfig {
     }
 
     @Bean
-    public ParticleRepository particleRepository(JdbcTemplate jdbcTemplate) {
-        return new ParticleRepository(jdbcTemplate);
+    public ParticleRepository particleRepository(JdbcTemplate jdbcTemplate, ObjectMapper mapper) {
+        return new ParticleRepository(mapper, jdbcTemplate);
     }
 
     @Bean

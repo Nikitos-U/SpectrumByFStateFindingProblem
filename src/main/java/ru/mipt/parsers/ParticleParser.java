@@ -1,5 +1,6 @@
 package ru.mipt.parsers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import ru.mipt.Particle;
 import ru.mipt.dao.DaoConfig;
@@ -18,7 +19,8 @@ public class ParticleParser {
     private final BufferedReader reader = new BufferedReader(inputFile);
     private final BufferedReader decaysReader = new BufferedReader(decaysFile);
     private final DaoConfig config = new DaoConfig();
-    private final ParticleRepository repository = new ParticleRepository(config.getJdbcTemplate());
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final ParticleRepository repository = new ParticleRepository(mapper, config.getJdbcTemplate());
 
     public ParticleParser() throws FileNotFoundException {
     }

@@ -1,17 +1,27 @@
 package ru.mipt.dao;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Value;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@ToString
+@Value
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ParticleEntry {
-    private long id;
-    private String name;
-    private String alias;
-    private double mass;
+    @JsonProperty("id")
+    long id;
+    @JsonProperty("name")
+    String name;
+    @JsonProperty("alias")
+    String alias;
+    @JsonProperty("mass")
+    double mass;
+
+    public ParticleEntry(@JsonProperty("id") long id, @JsonProperty("name") String name,
+                         @JsonProperty("alias") String alias, @JsonProperty("mass") double mass) {
+        this.id = id;
+        this.name = name;
+        this.alias = alias;
+        this.mass = mass;
+    }
 }
