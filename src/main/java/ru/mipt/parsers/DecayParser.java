@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import ru.mipt.Decay;
 import ru.mipt.Particle;
 import ru.mipt.dao.DaoConfig;
-import ru.mipt.dao.DecayEntry;
 import ru.mipt.dao.DecayRepository;
 
 import java.io.BufferedReader;
@@ -71,7 +70,7 @@ public class DecayParser {
                     hashKeyParticles = new StringBuilder(hashKeyParticles.substring(0, hashKeyParticles.length() - 1));
                     hashKeyParticles.append(" ").append(particles.size());
                     parsedDecays.put(hashKeyParticles.toString(), someDecay);
-                    repository.save(new DecayEntry(mapper.writeValueAsString(someDecay.getParticles()), mapper.writeValueAsString(someDecay.getMotherParticle()), someDecay.getProbability(), someDecay.getMass()));
+                    repository.save(someDecay);
                     hashKeyParticles = new StringBuilder();
                     line = reader.readLine().trim();
                 }
