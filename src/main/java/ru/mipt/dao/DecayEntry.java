@@ -1,18 +1,28 @@
 package ru.mipt.dao;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Value;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@ToString
+@Value
 public class DecayEntry {
-    private String particles;
-    private String motherParticle;
-    private Double probability;
-    private Double mass;
+    @JsonProperty("particles")
+    String particles;
+    @JsonProperty("motherParticle")
+    String motherParticle;
+    @JsonProperty("probability")
+    Double probability;
+    @JsonProperty("mass")
+    Double mass;
+
+    public DecayEntry(@JsonProperty("particles") String particles,
+                      @JsonProperty("motherParticle") String motherParticle,
+                      @JsonProperty("probability") Double probability,
+                      @JsonProperty("mass") Double mass) {
+
+        this.particles = particles;
+        this.motherParticle = motherParticle;
+        this.probability = probability;
+        this.mass = mass;
+    }
 }

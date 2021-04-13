@@ -3,17 +3,13 @@ package ru.mipt.dao;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import ru.mipt.Particle;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static java.util.Arrays.asList;
 import static java.util.stream.Collectors.toList;
 
 @Repository
@@ -21,20 +17,18 @@ import static java.util.stream.Collectors.toList;
 public class ParticleRepository {
     private final ObjectMapper mapper;
     private final JdbcTemplate template;
-    private final String insert = "CREATE (n:PARTICLE {name:?,alias:?,mass:?})";
+    private final String insert = "CREATE (n:PARTICLE {id:?,name:?,aliases:?,mass:?})";
     private final String getMothers = "MATCH (:PARTICLE {name: ?})<-[IS_MOTHER_OF]-(PARTICLE) RETURN PARTICLE";
     private final String getParticleByName = "MATCH (n:PARTICLE)  where n.name =~ ? " +
             "WITH {id:n.id," +
             "name:n.name, " +
-            "alias:n.alias, " +
+            "aliases:n.aliases, " +
             "mass:n.mass} AS Particle " +
             "RETURN Particle";
-    private final static RowMapper<String> PARTICLE_ENTRY_ROW_MAPPER = ((rs, rowNum) -> {
-       return rs.getString(1);
-    });
+    private final static RowMapper<String> PARTICLE_ENTRY_ROW_MAPPER = ((rs, rowNum) -> rs.getString(1));
 
-    public void saveParticle(ParticleEntry entry) {
-        template.update(insert, entry.getName(), entry.getAlias(), entry.getMass());
+    public void saveParticle(Particle entry) {
+            template.update(insert, entry.getId(), entry.getName(), entry.getAliases(), entry.getMass());
     }
 
     public Particle getParticleByName(String name) {
@@ -47,9 +41,7 @@ public class ParticleRepository {
 
     private Particle convertToParticle(String fromDb) {
         try {
-            ParticleEntry entry = mapper.readValue(fromDb, ParticleEntry.class);
-            ArrayList<String> aliases =  new ArrayList<>(asList(entry.getAlias().substring(1, entry.getAlias().length() - 1).split(", ")));
-            return new Particle(entry.getId(), entry.getName(), aliases, entry.getMass());
+            return mapper.readValue(fromDb, Particle.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

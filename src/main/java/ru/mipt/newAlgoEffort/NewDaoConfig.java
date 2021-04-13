@@ -40,7 +40,7 @@ public class NewDaoConfig {
     }
 
     @Bean
-    public DecayRepository dRepository(JdbcTemplate jdbcTemplate) {
-        return new DecayRepository(jdbcTemplate);
+    public DecayRepository dRepository(JdbcTemplate jdbcTemplate, ObjectMapper mapper) {
+        return new DecayRepository(mapper, jdbcTemplate);
     }
 }
