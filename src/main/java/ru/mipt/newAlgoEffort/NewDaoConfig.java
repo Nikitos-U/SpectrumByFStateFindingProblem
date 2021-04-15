@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import ru.mipt.DecaysFinder;
+import ru.mipt.ParticleCombinator;
+import ru.mipt.ProbableParticlesMaker;
 import ru.mipt.dao.DecayRepository;
 import ru.mipt.dao.ParticleRepository;
 
@@ -42,5 +45,20 @@ public class NewDaoConfig {
     @Bean
     public DecayRepository dRepository(JdbcTemplate jdbcTemplate, ObjectMapper mapper) {
         return new DecayRepository(mapper, jdbcTemplate);
+    }
+
+    @Bean
+    public ProbableParticlesMaker maker(DecayRepository decayRepository) {
+        return new ProbableParticlesMaker(decayRepository);
+    }
+
+    @Bean
+    public ParticleCombinator combinator(ParticleRepository particleRepository) {
+        return new ParticleCombinator(particleRepository);
+    }
+
+    @Bean
+    public DecaysFinder finder(ParticleCombinator combinator, ProbableParticlesMaker maker) {
+        return new DecaysFinder(combinator, maker);
     }
 }

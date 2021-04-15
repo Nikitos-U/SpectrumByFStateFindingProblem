@@ -1,17 +1,20 @@
 package ru.mipt;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 import java.util.ArrayList;
 
 @Getter
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Decay {
     private final ArrayList<Particle> particles;
     private final Particle motherParticle;
     private final Double probability;
     private Double mass = 0.0;
 // TODO charge conjugation method
-    public Decay(Particle motherParticle, ArrayList<Particle> particles, Double probability) {
+    public Decay(@JsonProperty("motherParticle") Particle motherParticle,@JsonProperty("particles") ArrayList<Particle> particles, @JsonProperty("probability") Double probability) {
         this.motherParticle = motherParticle;
         this.particles = particles;
         this.probability = probability;

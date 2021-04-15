@@ -1,9 +1,9 @@
 package ru.mipt.newAlgoEffort;
 
-import ru.mipt.Decay;
+import ru.mipt.Cascade;
 
 import java.util.List;
 
 public interface FstateService {
-    List<Decay> computeCascades(String fstate);
+    List<Cascade> computeCascades(String fstate);
 }

@@ -18,10 +18,10 @@ import static java.util.stream.Collectors.toList;
 public class DecayRepository {
     private final ObjectMapper mapper;
     private final JdbcTemplate template;
-    private final String create = "CREATE (n:DECAY {mother_particle:?, probability:?, mass:?, particles:?, mother_particle_name:?})";
+    private final String create = "CREATE (n:DECAY {probability:?, mass:?, particles:?, mother_particle_name:?, decay:?})";
     private final String createRelation = "MATCH (a:PARTICLE), (b:PARTICLE) WHERE a.name=~ ? AND b.name=~ ? CREATE (a)-[r:IS_MOTHER_OF]->(b)";
-    private final String getDecaysFromMotherParticle = "MATCH (n:DECAY)  where n.mother_particle =~ ? RETURN n";
-    private final String getDecayByParticles = "MATCH (n:DECAY)  where n.particles =~ ? RETURN n";
+    private final String getDecaysFromMotherParticle = "MATCH (n:DECAY)  where n.mother_particle_name =~ ? RETURN n.decay";
+    private final String getDecayByParticles = "MATCH (n:DECAY)  where n.particles =~ ? RETURN n.decay";
 
     private final String get = "SELECT * FROM DECAYS where(PARTICLES = :particles)";
 
@@ -29,8 +29,8 @@ public class DecayRepository {
 
     public void save(Decay entry) {
         try {
-            template.update(create, mapper.writeValueAsString(entry.getMotherParticle()), entry.getProbability(),
-                    entry.getMass(), mapper.writeValueAsString(entry.getParticles()), entry.getMotherParticle().getName());
+            template.update(create, entry.getProbability(),
+                    entry.getMass(), entry.getParticles().stream().map(Particle::getName).collect(toList()), entry.getMotherParticle().getName(), mapper.writeValueAsString(entry));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }

@@ -2,7 +2,6 @@ package ru.mipt.dao;
 
 import lombok.Getter;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 public class DaoConfig {

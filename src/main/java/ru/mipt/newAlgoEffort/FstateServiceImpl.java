@@ -2,9 +2,8 @@ package ru.mipt.newAlgoEffort;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import ru.mipt.Decay;
-import ru.mipt.Particle;
-import ru.mipt.dao.DecayRepository;
+import ru.mipt.Cascade;
+import ru.mipt.DecaysFinder;
 import ru.mipt.dao.ParticleRepository;
 
 import java.util.List;
@@ -16,17 +15,18 @@ import static java.util.Arrays.asList;
 @RequiredArgsConstructor
 public class FstateServiceImpl implements FstateService {
     private final ParticleRepository particlerepository;
-    private final DecayRepository decayRepository;
-    private final CascadesComputer computer;
+    private final DecaysFinder finder;
 
     @Override
-    public List<Decay> computeCascades(String fstate) {
-        List<Particle> particles = parseParticles(fstate);
-        return computer.computeCascades(particles, particlerepository, decayRepository);
+    public List<Cascade> computeCascades(String fstateString) {
+        Cascade fstate = parseParticles(fstateString);
+        return finder.findDecays(fstate);
     }
 
-    private List<Particle> parseParticles(String fstate) {
-        List<String> particles = asList(fstate.split(" "));
-        return particles.stream().map(particlerepository::getParticleByName).collect(Collectors.toList());
+    private Cascade parseParticles(String fstateString) {
+        List<String> particles = asList(fstateString.split(" "));
+        Cascade fstate = new Cascade();
+        fstate.setParticleList(particles.stream().map(particlerepository::getParticleByName).collect(Collectors.toList()));
+        return fstate;
     }
 }
