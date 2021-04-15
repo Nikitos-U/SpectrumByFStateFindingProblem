@@ -40,9 +40,8 @@ public class DecayParser {
                         continue;
                     }
                     String[] splittedLine = line.split("\\s+");
-                    hashKeyParticles.append(decayName).append(":");
                     Double probability = parseDouble(line.split(" ")[0].trim());
-                    ArrayList<Particle> particles = parseDecayParticles(parsedParticles, hashKeyParticles, splittedLine);
+                    ArrayList<Particle> particles = parseDecayParticles(parsedParticles, splittedLine);
                     Particle motherParticle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0, 0);
                     for (Particle particle : parsedParticles.values()) {
                         String finalDecayName = decayName;
@@ -55,9 +54,14 @@ public class DecayParser {
                         continue;
                     }
                     Decay someDecay = new Decay(motherParticle, particles, probability);
-                    hashKeyParticles = new StringBuilder(hashKeyParticles.substring(0, hashKeyParticles.length() - 1));
-                    parsedDecays.putByFirstKey(hashKeyParticles.toString(), someDecay);
-                    parsedDecays.addMotherParticle(motherParticle, particles.toString());
+                    hashKeyParticles.append(motherParticle.getId()).append(":");
+                    for (Particle particle : particles) {
+                        hashKeyParticles.append(particle.getId().toString()).append(" ");
+                    }
+                    parsedDecays.putByFirstKey(hashKeyParticles.toString().trim(), someDecay);
+                    parsedDecays.addMotherParticle(motherParticle, particles.stream()
+                            .map(Particle::getId)
+                            .reduce("", (x,y) -> x + " " + y.toString(), String::concat).trim());
                     hashKeyParticles = new StringBuilder();
                     line = reader.readLine().trim();
                 }
@@ -67,7 +71,7 @@ public class DecayParser {
         //TODO parse aliases from decay.dec
     }
 
-    private ArrayList<Particle> parseDecayParticles(HashMap<String, Particle> parsedParticles, StringBuilder hashKeyParticles, String[] splittedLine) {
+    private ArrayList<Particle> parseDecayParticles(HashMap<String, Particle> parsedParticles, String[] splittedLine) {
         ArrayList<Particle> particles = new ArrayList<>();
         int i = 1;
         while (!models.contains(splittedLine[i])) {
@@ -76,7 +80,6 @@ public class DecayParser {
                 if (particle.getAliases()
                         .stream().anyMatch(alias -> alias.equals(possibleName))) {
                     particles.add(parsedParticles.get(particle.getName()));
-                    hashKeyParticles.append(particle.getName()).append(",");
                 }
             }
             i++;
