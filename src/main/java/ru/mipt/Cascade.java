@@ -5,9 +5,11 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.sort;
+
 @Data
 public class Cascade {
-    private ArrayList<Particle> particleList;
+    private List<Particle> particleList;
     private List<Decay> history;
     private Double mass = 0.0;
 
@@ -19,10 +21,15 @@ public class Cascade {
 
     public Cascade(ArrayList<Particle> particleList, List<Decay> history) {
         this.particleList = particleList;
+        sort(this.particleList);
         this.history = history;
         for (Particle particle : particleList) {
             this.mass += particle.getMass();
         }
+    }
+
+    public void addToParticleList(Particle particle){
+        this.particleList.add(particle);
     }
 
     public Double getMass(){

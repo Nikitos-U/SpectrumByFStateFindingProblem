@@ -7,11 +7,12 @@ import java.util.ArrayList;
 
 
 @Data
-@EqualsAndHashCode
-public class Particle {
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+public class Particle implements Comparable<Particle> {
     private final String name;
     private ArrayList<String> aliases = new ArrayList<>();
     private final Double mass;
+    @EqualsAndHashCode.Include
     private final Integer id;
 //   TODO: antiparticle, charge
 
@@ -31,5 +32,10 @@ public class Particle {
     @Override
     public String toString() {
         return this.name;
+    }
+
+    @Override
+    public int compareTo(Particle particle) {
+        return this.getId() < particle.getId() ? 0 : -1;
     }
 }

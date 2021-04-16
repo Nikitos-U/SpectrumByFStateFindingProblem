@@ -26,6 +26,7 @@ public class SpectrumByFStateFinder {
         Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0, 0);
         particles.put("FAKE_MOTHER_PARTICLE_ADD_ALIAS", fake_mother_particle);
         decays = decayParser.parse();
+        System.out.println(decays.getKey1Map().keySet().size());
 //        decays.getKey1Map().keySet().forEach(System.out::println);
 //        System.out.println("second index contains: " + decays.getKey2Map().keySet().size() + " keys");
 //        System.out.println("parsed: " + decays.getKey1Map().keySet().size() + " decays");

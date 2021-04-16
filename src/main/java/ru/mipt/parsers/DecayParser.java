@@ -29,7 +29,6 @@ public class DecayParser {
         DoubleKeyHashMap parsedDecays = new DoubleKeyHashMap();
         String line;
         String decayName;
-        StringBuilder hashKeyParticles = new StringBuilder();
         while (!(line = reader.readLine().trim()).equals("End")) {
             if (line.startsWith("Decay")) {
                 decayName = line.split("\\s+")[1].trim();
@@ -41,7 +40,7 @@ public class DecayParser {
                     }
                     String[] splittedLine = line.split("\\s+");
                     Double probability = parseDouble(line.split(" ")[0].trim());
-                    ArrayList<Particle> particles = parseDecayParticles(parsedParticles, splittedLine);
+                    List<Particle> particles = parseDecayParticles(parsedParticles, splittedLine);
                     Particle motherParticle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 120120.0, 0);
                     for (Particle particle : parsedParticles.values()) {
                         String finalDecayName = decayName;
@@ -54,15 +53,8 @@ public class DecayParser {
                         continue;
                     }
                     Decay someDecay = new Decay(motherParticle, particles, probability);
-                    hashKeyParticles.append(motherParticle.getId()).append(":");
-                    for (Particle particle : particles) {
-                        hashKeyParticles.append(particle.getId().toString()).append(" ");
-                    }
-                    parsedDecays.putByFirstKey(hashKeyParticles.toString().trim(), someDecay);
-                    parsedDecays.addMotherParticle(motherParticle, particles.stream()
-                            .map(Particle::getId)
-                            .reduce("", (x,y) -> x + " " + y.toString(), String::concat).trim());
-                    hashKeyParticles = new StringBuilder();
+                    parsedDecays.putByFirstKey(someDecay.getId(), someDecay);
+                    parsedDecays.addMotherParticle(motherParticle, particles);
                     line = reader.readLine().trim();
                 }
             }

@@ -11,38 +11,38 @@ import java.util.Map;
 
 @Data
 public class DoubleKeyHashMap {
-    private final Map<String, Decay> key1Map;
-    private final Map<String, List<Particle>> key2Map;
+    private final Map<Integer, Decay> key1Map;
+    private final Map<List<Particle>, List<Particle>> key2Map;
 
     public DoubleKeyHashMap() {
         key1Map = new HashMap<>();
         key2Map = new HashMap<>();
     }
 
-    public void addMotherParticle(Particle motherParticle, String particles){
+    public void addMotherParticle(Particle motherParticle, List<Particle> particles){
         if (!key2Map.containsKey(particles)) {
             key2Map.put(particles, new ArrayList<>());
         }
         key2Map.get(particles).add(motherParticle);
     }
 
-    public Decay getByFirstKey(String key){
-        return key1Map.get(key);
+    public Decay getByFirstKey(Integer id){
+        return key1Map.get(id);
     }
 
-    public List<Particle> getBySecondKey(String key){
+    public List<Particle> getBySecondKey(List<Particle> key){
         return key2Map.get(key);
     }
 
-    public void putByFirstKey(String key, Decay decay){
-        key1Map.put(key, decay);
+    public void putByFirstKey(Integer id, Decay decay){
+        key1Map.put(id, decay);
     }
 
-    public Boolean containsFirstKey(String key){
-        return key1Map.containsKey(key);
+    public Boolean containsFirstKey(Integer id){
+        return key1Map.containsKey(id);
     }
 
-    public Boolean containsSecondKey(String key){
+    public Boolean containsSecondKey(List<Particle> key){
         return key2Map.containsKey(key);
     }
 }

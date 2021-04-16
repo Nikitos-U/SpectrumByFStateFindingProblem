@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+
 public class ProbableParticlesMaker {
     private final DoubleKeyHashMap parsedDecays;
 
@@ -15,14 +16,13 @@ public class ProbableParticlesMaker {
         this.parsedDecays = parsedDecays;
     }
 
-    public Map<Particle, Decay> combinationsToParticles(List<String> ids) {
+    public Map<Particle, Decay> combinationsToParticles(List<Particle> particles) {
         Map<Particle, Decay> probableParticles = new HashMap<>();
-        String contactedIds = ids.stream().reduce("", (x, y) -> x + " " + y, String::concat).trim();
-        if (parsedDecays.containsSecondKey(contactedIds)){
-            parsedDecays.getBySecondKey(contactedIds).stream()
+        if (parsedDecays.containsSecondKey(particles)) {
+            parsedDecays.getBySecondKey(particles).stream()
                     .filter(Objects::nonNull)
                     .forEach(motherParticle -> probableParticles.put(motherParticle,
-                            parsedDecays.getByFirstKey(motherParticle.getId().toString() + ":" + contactedIds)));
+                            parsedDecays.getByFirstKey(new Decay(particles, motherParticle).hashCode())));
         }
         return probableParticles;
     }
