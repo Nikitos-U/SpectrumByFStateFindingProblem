@@ -29,7 +29,7 @@ public class ParticleParser {
     public HashMap<String, Particle> parse() {
         HashMap<String, Particle> parsedParticles = new HashMap<>();
         String line;
-        long i = 0L;
+        Integer i = 0;
         while (!(line = reader.readLine()).startsWith(" -")) {
             i++;
             double mass = parseMass(line);

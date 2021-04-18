@@ -25,14 +25,24 @@ public class ParticleRepository {
             "aliases:n.aliases, " +
             "mass:n.mass} AS Particle " +
             "RETURN Particle";
+    private final String getParticleById = "MATCH (n:PARTICLE)  where n.id =~ ? " +
+            "WITH {id:n.id," +
+            "name:n.name, " +
+            "aliases:n.aliases, " +
+            "mass:n.mass} AS Particle " +
+            "RETURN Particle";
     private final static RowMapper<String> PARTICLE_ENTRY_ROW_MAPPER = ((rs, rowNum) -> rs.getString(1));
 
     public void saveParticle(Particle entry) {
-            template.update(insert, entry.getId(), entry.getName(), entry.getAliases(), entry.getMass());
+            template.update(insert, entry.getId().toString(), entry.getName(), entry.getAliases(), entry.getMass());
     }
 
     public Particle getParticleByName(String name) {
         return convertToParticle(template.queryForObject(getParticleByName, new Object[]{name}, PARTICLE_ENTRY_ROW_MAPPER));
+    }
+
+    public Particle getParticleById(String id) {
+        return convertToParticle(template.queryForObject(getParticleById, new Object[]{id}, PARTICLE_ENTRY_ROW_MAPPER));
     }
 
     public List<Particle> getMothers(Particle particle) {

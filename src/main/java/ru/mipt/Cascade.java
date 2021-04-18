@@ -5,6 +5,8 @@ import lombok.Data;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Collections.sort;
+
 @Data
 public class Cascade {
     private List<Particle> particleList;

@@ -5,9 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.util.List;
 
 @Getter
@@ -16,7 +14,6 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Particle implements Comparable<Particle> {
     @EqualsAndHashCode.Include
-    private long id;
     private final String name;
     private final List<String> aliases;
     private final Double mass;
@@ -24,7 +21,7 @@ public class Particle implements Comparable<Particle> {
     private final Integer id;
 //   TODO: antiparticle, charge
 
-    public Particle(@JsonProperty("id") long id,
+    public Particle(@JsonProperty("id") Integer id,
                     @JsonProperty("name") String name,
                     @JsonProperty("aliases") List<String> aliases,
                     @JsonProperty("mass") Double mass) {

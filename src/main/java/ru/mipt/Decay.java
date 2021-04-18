@@ -18,10 +18,14 @@ public class Decay {
     @EqualsAndHashCode.Include
     private final Particle motherParticle;
     private final Double probability;
-    private final int id;
+    private final Integer id;
     private Double mass = 0.0;
 // TODO charge conjugation method
-    public Decay(@JsonProperty("motherParticle") Particle motherParticle,@JsonProperty("particles") ArrayList<Particle> particles, @JsonProperty("probability") Double probability) {
+    public Decay(@JsonProperty("id") Integer id,
+                 @JsonProperty("motherParticle") Particle motherParticle,
+                 @JsonProperty("particles") List<Particle> particles,
+                 @JsonProperty("probability") Double probability) {
+        this.id = id;
         this.motherParticle = motherParticle;
         this.particles = particles;
         sort(this.particles);
@@ -29,7 +33,17 @@ public class Decay {
         for (Particle particle : particles) {
             this.mass += particle.getMass();
         }
-        id = this.hashCode();
+    }
+
+    public Decay(Particle motherParticle, List<Particle> particles, Double probability) {
+        this.motherParticle = motherParticle;
+        this.particles = particles;
+        sort(this.particles);
+        this.probability = probability;
+        for (Particle particle : particles) {
+            this.mass += particle.getMass();
+        }
+        this.id = this.hashCode();
     }
 
     @Override

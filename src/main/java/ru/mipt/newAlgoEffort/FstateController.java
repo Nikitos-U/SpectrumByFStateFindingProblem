@@ -13,7 +13,7 @@ import java.util.List;
 public class FstateController {
     private final FstateService service;
 
-    @RequestMapping("/")
+    @RequestMapping("/compute")
     public List<Cascade> computeFstate(@RequestParam String fstate) {
         return service.computeCascades(fstate);
     }

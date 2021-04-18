@@ -1,5 +1,9 @@
 package ru.mipt;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+import ru.mipt.dao.ParticleRepository;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -9,11 +13,7 @@ import static org.apache.commons.collections4.CollectionUtils.subtract;
 @Component
 @RequiredArgsConstructor
 public class ParticleCombinator {
-    private final HashMap<String, Particle> parsedParticles;
-
-    public ParticleCombinator(HashMap<String, Particle> parsedParticles) {
-        this.parsedParticles = parsedParticles;
-    }
+    private final ParticleRepository particleRepository;
 
     public ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
         ArrayList<String> result1 = new ArrayList<>();
@@ -83,13 +83,11 @@ public class ParticleCombinator {
 
     private List<Particle> stringToParticles(String s) {
         List<Particle> possibleDecayParticles = new ArrayList<>();
+        s = s.strip();
         Arrays.stream(s.split("\\s+"))
-                .map(key -> parsedParticles.values().stream()
-                        .filter(particle -> key.equals(particle.getId().toString()))
-                        .findFirst()
-                        .orElse(null))
-                .filter(Objects::nonNull)
-                .forEach(possibleDecayParticles::add);
+                .map(particleRepository::getParticleById)
+                        .filter(Objects::nonNull)
+                        .forEach(possibleDecayParticles::add);
         sort(possibleDecayParticles);
         return possibleDecayParticles;
     }

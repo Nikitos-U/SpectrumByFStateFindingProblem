@@ -18,7 +18,7 @@ import static java.util.stream.Collectors.toList;
 public class DecayRepository {
     private final ObjectMapper mapper;
     private final JdbcTemplate template;
-    private final String create = "CREATE (n:DECAY {probability:?, mass:?, particles:?, mother_particle_name:?, decay:?})";
+    private final String create = "CREATE (n:DECAY {id:?, probability:?, mass:?, particles:?, mother_particle_name:?, decay:?})";
     private final String createRelation = "MATCH (a:PARTICLE), (b:PARTICLE) WHERE a.name=~ ? AND b.name=~ ? CREATE (a)-[r:IS_MOTHER_OF]->(b)";
     private final String getDecaysFromMotherParticle = "MATCH (n:DECAY)  where n.mother_particle_name =~ ? RETURN n.decay";
     private final String getDecayByParticles = "MATCH (n:DECAY)  where n.particles =~ ? RETURN n.decay";
@@ -29,8 +29,15 @@ public class DecayRepository {
 
     public void save(Decay entry) {
         try {
-            template.update(create, entry.getProbability(),
-                    entry.getMass(), entry.getParticles().stream().map(Particle::getName).collect(toList()), entry.getMotherParticle().getName(), mapper.writeValueAsString(entry));
+            StringBuilder particlesNames = new StringBuilder();
+            entry.getParticles()
+                    .stream()
+                    .map(Particle::getName)
+                    .collect(toList())
+                    .forEach(particlesNames::append);
+            String particles = particlesNames.toString();
+            template.update(create, entry.getId().toString(), entry.getProbability(),
+                    entry.getMass(), particlesNames, entry.getMotherParticle().getName(), mapper.writeValueAsString(entry));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
@@ -44,16 +51,16 @@ public class DecayRepository {
     }
 
     public List<Decay> getDecaysByParticles(List<Particle> particles) {
-        try {
-            String param = mapper.writeValueAsString(particles);
-            return template.query(getDecayByParticles, new Object[]{param}, DECAY_ENTRY_ROW_MAPPER)
+        StringBuilder particlesNames = new StringBuilder();
+        particles
+                .stream()
+                .map(Particle::getName)
+                .collect(toList())
+                .forEach(particlesNames::append);
+            return template.query(getDecayByParticles, new Object[]{particlesNames.toString()}, DECAY_ENTRY_ROW_MAPPER)
                     .stream()
                     .map(this::convertToDecay)
                     .collect(toList());
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     public void saveRelations(String decayName, String particleName) {
