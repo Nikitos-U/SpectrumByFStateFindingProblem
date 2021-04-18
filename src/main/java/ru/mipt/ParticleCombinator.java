@@ -52,7 +52,7 @@ public class ParticleCombinator {
                 for (int j = 0; j < s.split("\\s+").length; j++) {
                     possibleDecayParticles.add(Objects.requireNonNull(repository.getParticleByName(s.split("\\s+")[j].trim())));
                 }
-                if (!possibleDecayParticles.containsAll(cascade.getParticleList())) {
+                if (possibleDecayParticles.containsAll(cascade.getParticleList())) {
                     int counter = possibleDecayParticles.size();
                     while (counter < fstateSize) {
                         if (!probableParticlesMaker.convertCombinationsToParticles(possibleDecayParticles).isEmpty()) {

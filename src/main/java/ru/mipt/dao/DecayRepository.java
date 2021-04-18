@@ -44,10 +44,16 @@ public class DecayRepository {
     }
 
     public List<Decay> getDecaysByParticles(List<Particle> particles) {
-        return template.query(getDecayByParticles, new Object[]{particles}, DECAY_ENTRY_ROW_MAPPER)
-                .stream()
-                .map(this::convertToDecay)
-                .collect(toList());
+        try {
+            String param = mapper.writeValueAsString(particles);
+            return template.query(getDecayByParticles, new Object[]{param}, DECAY_ENTRY_ROW_MAPPER)
+                    .stream()
+                    .map(this::convertToDecay)
+                    .collect(toList());
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public void saveRelations(String decayName, String particleName) {
