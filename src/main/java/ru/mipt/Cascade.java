@@ -19,10 +19,15 @@ public class Cascade {
 
     public Cascade(List<Particle> particleList, List<Decay> history) {
         this.particleList = particleList;
+        sort(this.particleList);
         this.history = history;
         for (Particle particle : particleList) {
             this.mass += particle.getMass();
         }
+    }
+
+    public void addToParticleList(Particle particle){
+        this.particleList.add(particle);
     }
 
     public Double getMass(){
