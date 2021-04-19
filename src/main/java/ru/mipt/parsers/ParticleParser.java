@@ -3,8 +3,11 @@ package ru.mipt.parsers;
 import lombok.SneakyThrows;
 import ru.mipt.Particle;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class ParticleParser {
@@ -12,6 +15,7 @@ public class ParticleParser {
     private final FileReader decaysFile = new FileReader("src/main/resources/DECAY.DEC");
     private final BufferedReader reader = new BufferedReader(inputFile);
     private final BufferedReader decaysReader = new BufferedReader(decaysFile);
+    private final AtomicInteger idsGenerator = new AtomicInteger();
 
     public ParticleParser() throws FileNotFoundException {
     }
@@ -22,7 +26,7 @@ public class ParticleParser {
         String line;
         while (!(line = reader.readLine()).startsWith(" -")) {
             double mass = parseMass(line);
-            Particle particle = new Particle(line.split("\\|")[1].trim(), mass);
+            Particle particle = new Particle(line.split("\\|")[1].trim(), mass, idsGenerator.incrementAndGet());
             if (!line.split("\\|")[7].trim().equals("unknown")) {
                 particle.addAlias(line.split("\\|")[7].trim());
             }
