@@ -1,8 +1,9 @@
 package ru.mipt.parsers;
 
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 import ru.mipt.Decay;
 import ru.mipt.Particle;
-import ru.mipt.utils.DoubleKeyHashMap;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -25,8 +26,8 @@ public class DecayParser {
         this.parsedParticles = parsedParticles;
     }
 
-    public DoubleKeyHashMap parse() throws IOException {
-        DoubleKeyHashMap parsedDecays = new DoubleKeyHashMap();
+    public MultiValuedMap<List<Particle>, Decay> parse() throws IOException {
+        MultiValuedMap<List<Particle>, Decay> parsedDecays = new ArrayListValuedHashMap<>();
         String line;
         String decayName;
         while (!(line = reader.readLine().trim()).equals("End")) {
@@ -53,8 +54,7 @@ public class DecayParser {
                         continue;
                     }
                     Decay someDecay = new Decay(motherParticle, particles, probability);
-                    parsedDecays.putByFirstKey(someDecay.getId(), someDecay);
-                    parsedDecays.addMotherParticle(motherParticle, particles);
+                    parsedDecays.put(particles, someDecay);
                     line = reader.readLine().trim();
                 }
             }
