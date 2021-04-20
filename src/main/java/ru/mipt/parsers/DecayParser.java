@@ -76,7 +76,7 @@ public class DecayParser {
                 }
             }
         }
-        createRelations(parsedDecays);
+//        createRelations(parsedDecays);
         return parsedDecays;
         //TODO parse aliases from decay.dec
     }
@@ -98,12 +98,12 @@ public class DecayParser {
         return particles;
     }
 
-    private void createRelations(HashMap<String, Decay> parsedDecays) {
-        for (String decayName : parsedDecays.keySet()) {
-            Decay decay = parsedDecays.get(decayName);
-            for (Particle particle : decay.getParticles()) {
-                repository.saveRelations(decay.getMotherParticle().getName(), particle.getName());
-            }
-        }
-    }
+//    private void createRelations(HashMap<String, Decay> parsedDecays) {
+//        for (String decayName : parsedDecays.keySet()) {
+//            Decay decay = parsedDecays.get(decayName);
+//            for (Particle particle : decay.getParticles()) {
+//                repository.saveRelations(decay.getMotherParticle().getName(), particle.getName());
+//            }
+//        }
+//    }
 }

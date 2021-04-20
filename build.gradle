@@ -14,7 +14,9 @@ repositories {
     }
 }
 
+
 dependencies {
+
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -23,6 +25,9 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok:1.18.16'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
     compile 'org.neo4j:neo4j-jdbc-driver:4.0.1'
+    compile 'com.h2database:h2:1.4.200'
+    testImplementation('junit:junit:4.13')
+    testCompile("org.springframework.boot:spring-boot-starter-test")
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.3.1'
     compile group: 'com.google.guava', name: 'guava', version: '23.5-jre'

@@ -1,6 +1,7 @@
 package ru.mipt.starters;
 
 import ru.mipt.dao.DBFiller;
+import ru.mipt.dao.DbPatcher;
 import ru.mipt.parsers.DecayParser;
 import ru.mipt.parsers.ParticleParser;
 
@@ -20,7 +21,8 @@ public class DBStarter {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        DBFiller filler = new DBFiller(decayParser, particleParser);
+        DbPatcher patcher = new DbPatcher();
+        DBFiller filler = new DBFiller(decayParser, particleParser, patcher);
         filler.parse();
     }
 }

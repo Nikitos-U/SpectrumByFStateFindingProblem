@@ -18,14 +18,13 @@ import static java.util.stream.Collectors.toList;
 public class DecayRepository {
     private final ObjectMapper mapper;
     private final JdbcTemplate template;
-    private final String create = "CREATE (n:DECAY {id:?, probability:?, mass:?, particles:?, mother_particle_name:?, decay:?})";
+    private final String create =  "INSERT INTO DECAYS(id, probability, mass, particles_names, mother_particle_name, decay) " +
+            "VALUES (?, ?, ?, ?, ?, ?)";;
     private final String createRelation = "MATCH (a:PARTICLE), (b:PARTICLE) WHERE a.name=~ ? AND b.name=~ ? CREATE (a)-[r:IS_MOTHER_OF]->(b)";
-    private final String getDecaysFromMotherParticle = "MATCH (n:DECAY)  where n.mother_particle_name =~ ? RETURN n.decay";
-    private final String getDecayByParticles = "MATCH (n:DECAY)  where n.particles =~ ? RETURN n.decay";
+    private final String getDecaysFromMotherParticle = "SELECT * FROM DECAYS where(mother_particle_name = ?)";
+    private final String getDecayByParticles = "SELECT * FROM DECAYS where(particles_names = ?)";
 
-    private final String get = "SELECT * FROM DECAYS where(PARTICLES = :particles)";
-
-    private final static RowMapper<String> DECAY_ENTRY_ROW_MAPPER = ((rs, rowNum) -> rs.getString(1));
+    private final static RowMapper<String> DECAY_ENTRY_ROW_MAPPER = ((rs, rowNum) -> rs.getString("decay"));
 
     public void save(Decay entry) {
         try {

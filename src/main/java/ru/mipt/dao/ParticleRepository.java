@@ -17,24 +17,18 @@ import static java.util.stream.Collectors.toList;
 public class ParticleRepository {
     private final ObjectMapper mapper;
     private final JdbcTemplate template;
-    private final String insert = "CREATE (n:PARTICLE {id:?,name:?,aliases:?,mass:?})";
+    private final String insert = "INSERT INTO PARTICLES(id, name, aliases, mass, particle) values (?, ?, ?, ?,?)";
     private final String getMothers = "MATCH (:PARTICLE {name: ?})<-[IS_MOTHER_OF]-(PARTICLE) RETURN PARTICLE";
-    private final String getParticleByName = "MATCH (n:PARTICLE)  where n.name =~ ? " +
-            "WITH {id:n.id," +
-            "name:n.name, " +
-            "aliases:n.aliases, " +
-            "mass:n.mass} AS Particle " +
-            "RETURN Particle";
-    private final String getParticleById = "MATCH (n:PARTICLE)  where n.id =~ ? " +
-            "WITH {id:n.id," +
-            "name:n.name, " +
-            "aliases:n.aliases, " +
-            "mass:n.mass} AS Particle " +
-            "RETURN Particle";
-    private final static RowMapper<String> PARTICLE_ENTRY_ROW_MAPPER = ((rs, rowNum) -> rs.getString(1));
+    private final String getParticleByName = "SELECT * FROM PARTICLES where name = ?";
+    private final String getParticleById = "SELECT * FROM PARTICLES where id = ?";
+    private final static RowMapper<String> PARTICLE_ENTRY_ROW_MAPPER = ((rs, rowNum) -> rs.getString("particle"));
 
     public void saveParticle(Particle entry) {
-            template.update(insert, entry.getId().toString(), entry.getName(), entry.getAliases(), entry.getMass());
+        try {
+            template.update(insert, entry.getId().toString(), entry.getName(), entry.getAliases(), entry.getMass(), mapper.writeValueAsString(entry));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
     }
 
     public Particle getParticleByName(String name) {

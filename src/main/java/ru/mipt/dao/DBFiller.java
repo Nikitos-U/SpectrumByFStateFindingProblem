@@ -13,18 +13,21 @@ import java.util.HashMap;
 public class DBFiller {
     private final DecayParser decayParser;
     private final ParticleParser particleParser;
+    private final DbPatcher patcher;
     @Getter
     private HashMap<String, Particle> particles = new HashMap<>();
     @Getter
     private HashMap<String, Decay> decays = new HashMap<>();
 
-    public DBFiller(DecayParser decayParse, ParticleParser particleParser) {
+    public DBFiller(DecayParser decayParse, ParticleParser particleParser, DbPatcher patcher) {
+        this.patcher = patcher;
         this.decayParser = decayParse;
         this.particleParser = particleParser;
     }
 
     @SneakyThrows
     public void parse() {
+        this.patcher.createTables();
         this.particles = particleParser.parse();
         this.decays = decayParser.parse(this.particles);
     }
