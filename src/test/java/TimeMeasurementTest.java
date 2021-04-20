@@ -83,6 +83,16 @@ public class TimeMeasurementTest {
             long timeOfRun = nanoTime() - time;
             pw.println(4 + ", " + timeOfRun);
         }
+        Cascade fiveParticlesFstate = new Cascade();
+        for (String arg : new String[]{"pi+", "pi-", "pi0", "K+", "K0"}) {
+            fiveParticlesFstate.getParticleList().add(particles.get(arg));
+        }
+        for (int i = 0; i < 100; i++) {
+            long time = nanoTime();
+            decaysFinder.findDecays(fiveParticlesFstate);
+            long timeOfRun = nanoTime() - time;
+            pw.println(5 + ", " + timeOfRun);
+        }
         pw.close();
     }
 }

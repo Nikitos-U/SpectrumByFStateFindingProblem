@@ -65,7 +65,6 @@ public class SpectrumByFStateFinder {
                 }
             }
         }
-//        System.out.println("fstateMass = " + fstate.getMass() + " keV");
         ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
         DecaysFinder decaysFinder = new DecaysFinder(combinator, probableParticlesMaker);
         ArrayList<Cascade> finalCascades;
