@@ -1,29 +1,21 @@
 package ru.mipt;
 
-import ru.mipt.utils.DoubleKeyHashMap;
+import com.google.common.collect.Table;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 public class ProbableParticlesMaker {
-    private final DoubleKeyHashMap parsedDecays;
+    private final Table<Particle, List<Particle>, Decay> parsedDecays;
 
 
-    public ProbableParticlesMaker(DoubleKeyHashMap parsedDecays) {
+    public ProbableParticlesMaker(Table<Particle, List<Particle>, Decay> parsedDecays) {
         this.parsedDecays = parsedDecays;
     }
 
     public Map<Particle, Decay> combinationsToParticles(List<Particle> particles) {
-        Map<Particle, Decay> probableParticles = new HashMap<>();
-        if (parsedDecays.containsSecondKey(particles)) {
-            parsedDecays.getBySecondKey(particles).stream()
-                    .filter(Objects::nonNull)
-                    .forEach(motherParticle -> probableParticles.put(motherParticle,
-                            parsedDecays.getByFirstKey(new Decay(particles, motherParticle).hashCode())));
-        }
-        return probableParticles;
+        return parsedDecays.containsColumn(particles) ? parsedDecays.column(particles) : new HashMap<>();
     }
 }

@@ -1,8 +1,8 @@
 package ru.mipt.parsers;
 
+import com.google.common.collect.Table;
 import ru.mipt.Decay;
 import ru.mipt.Particle;
-import ru.mipt.utils.DoubleKeyHashMap;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -13,7 +13,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static com.google.common.collect.HashBasedTable.create;
 import static java.lang.Double.parseDouble;
+import static java.util.Collections.sort;
 
 public class DecayParser {
     private final FileReader inputFile = new FileReader("src/main/resources/DECAY.DEC");
@@ -25,8 +27,9 @@ public class DecayParser {
         this.parsedParticles = parsedParticles;
     }
 
-    public DoubleKeyHashMap parse() throws IOException {
-        DoubleKeyHashMap parsedDecays = new DoubleKeyHashMap();
+    public Table<Particle, List<Particle>, Decay> parse() throws IOException {
+        Table<Particle, List<Particle>, Decay> parsedDecays = create();
+//        Table<Integer, Decay, List<Particle>> parsedDecays = new HashBasedTable<Integer, Decay, List<Particle>>();
         String line;
         String decayName;
         while (!(line = reader.readLine().trim()).equals("End")) {
@@ -52,9 +55,11 @@ public class DecayParser {
                         line = reader.readLine().trim();
                         continue;
                     }
+                    sort(particles);
                     Decay someDecay = new Decay(motherParticle, particles, probability);
-                    parsedDecays.putByFirstKey(someDecay.getId(), someDecay);
-                    parsedDecays.addMotherParticle(motherParticle, particles);
+                    parsedDecays.put(someDecay.getMotherParticle(), particles, someDecay);
+//                    parsedDecays.putByFirstKey(someDecay.getId(), someDecay);
+//                    parsedDecays.addMotherParticle(motherParticle, particles);
                     line = reader.readLine().trim();
                 }
             }

@@ -1,15 +1,16 @@
+import com.google.common.collect.Table;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import ru.mipt.*;
 import ru.mipt.parsers.DecayParser;
 import ru.mipt.parsers.ParticleParser;
-import ru.mipt.utils.DoubleKeyHashMap;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 
 import static java.lang.System.nanoTime;
 
@@ -17,7 +18,7 @@ public class TimeMeasurementTest {
     ParticleParser particleParser = new ParticleParser();
     HashMap<String, Particle> particles = particleParser.parse();
     DecayParser decayParser = new DecayParser(particles);
-    DoubleKeyHashMap decays = decayParser.parse();
+    Table<Particle, List<Particle>, Decay> decays = decayParser.parse();
     Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0, 0);
     ProbableParticlesMaker probableParticlesMaker = new ProbableParticlesMaker(decays);
     ParticleCombinator combinator = new ParticleCombinator(particles);
@@ -49,7 +50,7 @@ public class TimeMeasurementTest {
     public void measureWorkingTime() {
         warmUp();
         System.out.println("started test");
-        File csvOutputFile = new File("");
+        File csvOutputFile = new File("/Users/a18535673/Projects/SpectrumByFStateFindingProblem/src/test/resources/tableResults.csv");
         PrintWriter pw = new PrintWriter(new FileOutputStream(csvOutputFile, true));
         pw.println("num of particles, working time ns");
         particles.put("FAKE_MOTHER_PARTICLE_ADD_ALIAS", fake_mother_particle);
@@ -82,6 +83,16 @@ public class TimeMeasurementTest {
             decaysFinder.findDecays(fourParticlesFstate);
             long timeOfRun = nanoTime() - time;
             pw.println(4 + ", " + timeOfRun);
+        }
+        Cascade fiveParticlesFstate = new Cascade();
+        for (String arg : new String[]{"pi+", "pi-", "pi0", "K+", "K0"}) {
+            fiveParticlesFstate.getParticleList().add(particles.get(arg));
+        }
+        for (int i = 0; i < 100; i++) {
+            long time = nanoTime();
+            decaysFinder.findDecays(fiveParticlesFstate);
+            long timeOfRun = nanoTime() - time;
+            pw.println(5 + ", " + timeOfRun);
         }
         pw.close();
     }
