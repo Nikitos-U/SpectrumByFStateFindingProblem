@@ -38,7 +38,7 @@ public class TimeMeasurementTest {
 
     private final String fstateTwoParticles = "K0,pi-";
     private final String fstateThreeParticles = "K0,pi0,pi0";
-    private final String fstateFourParticles = "pi+,pi-,K0,K-";
+    private final String fstateFourParticles = "pi-,pi-,K0";
     private final String fstateFiveParticles = "pi+,pi+,pi-,K0,K-";
 
 
@@ -67,7 +67,7 @@ public class TimeMeasurementTest {
     public void warmUp() {
         setUp();
         System.out.println("started warm up");
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 500; i++) {
             Thread.sleep(10);
             service.computeCascades(fstateTwoParticles);
         }
