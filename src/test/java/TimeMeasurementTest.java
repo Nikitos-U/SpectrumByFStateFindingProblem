@@ -38,7 +38,7 @@ public class TimeMeasurementTest {
 
     private final String fstateTwoParticles = "K0,pi-";
     private final String fstateThreeParticles = "K0,pi0,pi0";
-    private final String fstateFourParticles = "pi-,pi-,K0";
+    private final String fstateFourParticles = "pi-,eta,eta,pi0";
     private final String fstateFiveParticles = "pi+,pi+,pi-,K0,K-";
 
 
@@ -67,7 +67,7 @@ public class TimeMeasurementTest {
     public void warmUp() {
         setUp();
         System.out.println("started warm up");
-        for (int i = 0; i < 500; i++) {
+        for (int i = 0; i < 150; i++) {
             Thread.sleep(10);
             service.computeCascades(fstateTwoParticles);
         }
@@ -78,32 +78,33 @@ public class TimeMeasurementTest {
     @Test
     public void measureWorkingTime() {
         warmUp();
+        Thread.sleep(15000);
         System.out.println("started test");
-        File csvOutputFile = new File("H2_measurements_Logs_off.csv");
+        File csvOutputFile = new File("H2_measurements_4particles_brand_new.csv");
         PrintWriter pw = new PrintWriter(new FileOutputStream(csvOutputFile, true));
 
-        for (int i = 0; i < 100; i++) {
-            Thread.sleep(100);
-            long time = nanoTime();
-            service.computeCascades(fstateTwoParticles);
-            long timeOfRun = nanoTime() - time;
-            pw.println(2 + ", " + timeOfRun);
-        }
-
-        for (int i = 0; i < 50; i++) {
-            Thread.sleep(10);
-            long time = nanoTime();
-            service.computeCascades(fstateThreeParticles);
-            long timeOfRun = nanoTime() - time;
-            pw.println(3 + ", " + timeOfRun);
-        }
-
-//        for (int i = 0; i < 10; i++) {
+//        for (int i = 0; i < 100; i++) {
+//            Thread.sleep(100);
 //            long time = nanoTime();
-//            service.computeCascades(fstateFourParticles);
+//            service.computeCascades(fstateTwoParticles);
 //            long timeOfRun = nanoTime() - time;
-//            pw.println(4 + ", " + timeOfRun);
+//            pw.println(2 + ", " + timeOfRun);
 //        }
+//
+//        for (int i = 0; i < 50; i++) {
+//            Thread.sleep(10);
+//            long time = nanoTime();
+//            service.computeCascades(fstateThreeParticles);
+//            long timeOfRun = nanoTime() - time;
+//            pw.println(3 + ", " + timeOfRun);
+//        }
+
+        for (int i = 0; i < 5; i++) {
+            long time = nanoTime();
+            service.computeCascades(fstateFourParticles);
+            long timeOfRun = nanoTime() - time;
+            pw.println(4 + ", " + timeOfRun);
+        }
 
 //        for (int i = 0; i < 100; i++) {
 //            long time = nanoTime();
