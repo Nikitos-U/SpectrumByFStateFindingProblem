@@ -86,7 +86,7 @@ public class TimeMeasurementTest {
     public void measureWorkingTime() {
         warmUp();
         System.out.println("started test");
-        File csvOutputFile = new File("H2_measurements_Logs_off.csv");
+        File csvOutputFile = new File("H2_measurements_Logs_all.csv");
         PrintWriter pw = new PrintWriter(new FileOutputStream(csvOutputFile, true));
 
         for (int i = 0; i < 100; i++) {
@@ -103,14 +103,14 @@ public class TimeMeasurementTest {
             pw.println(3 + ", " + timeOfRun);
         }
 
-//        for (int i = 0; i < 10; i++) {
-//            long time = nanoTime();
-//            service.computeCascades(fstateFourParticles);
-//            long timeOfRun = nanoTime() - time;
-//            pw.println(4 + ", " + timeOfRun);
-//        }
+        for (int i = 0; i < 50; i++) {
+            long time = nanoTime();
+            service.computeCascades(fstateFourParticles);
+            long timeOfRun = nanoTime() - time;
+            pw.println(4 + ", " + timeOfRun);
+        }
 
-//        for (int i = 0; i < 100; i++) {
+//        for (int i = 0; i < 10; i++) {
 //            long time = nanoTime();
 //            service.computeCascades(fstateFiveParticles);
 //            long timeOfRun = nanoTime() - time;
