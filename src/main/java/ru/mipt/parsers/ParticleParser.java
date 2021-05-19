@@ -1,9 +1,8 @@
 package ru.mipt.parsers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
+import org.springframework.stereotype.Component;
 import ru.mipt.Particle;
-import ru.mipt.dao.DaoConfig;
 import ru.mipt.dao.ParticleRepository;
 
 import java.io.BufferedReader;
@@ -12,17 +11,16 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-
+@Component
 public class ParticleParser {
     private final FileReader inputFile = new FileReader("src/main/resources/particles.txt");
     private final FileReader decaysFile = new FileReader("src/main/resources/DECAY.DEC");
     private final BufferedReader reader = new BufferedReader(inputFile);
     private final BufferedReader decaysReader = new BufferedReader(decaysFile);
-    private final DaoConfig config = new DaoConfig();
-    private final ObjectMapper mapper = new ObjectMapper();
-    private final ParticleRepository repository = new ParticleRepository(mapper, config.getJdbcTemplate());
+    private final ParticleRepository repository;
 
-    public ParticleParser() throws FileNotFoundException {
+    public ParticleParser(ParticleRepository repository) throws FileNotFoundException {
+        this.repository = repository;
     }
 
     @SneakyThrows

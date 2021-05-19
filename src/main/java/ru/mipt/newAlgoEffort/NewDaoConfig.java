@@ -2,15 +2,23 @@ package ru.mipt.newAlgoEffort;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.h2.jdbcx.JdbcDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import ru.mipt.DecaysFinder;
 import ru.mipt.ParticleCombinator;
 import ru.mipt.ProbableParticlesMaker;
+import ru.mipt.dao.DbPatcher;
 import ru.mipt.dao.DecayRepository;
 import ru.mipt.dao.ParticleRepository;
+import ru.mipt.parsers.DecayParser;
+import ru.mipt.parsers.ParticleParser;
+import ru.mipt.starters.DBStarter;
+
+import javax.sql.DataSource;
+import java.io.FileNotFoundException;
 
 @Configuration
 public class NewDaoConfig {
@@ -24,16 +32,14 @@ public class NewDaoConfig {
     }
 
     @Bean
-    public JdbcDataSource dataSource() {
-            JdbcDataSource dataSource = new JdbcDataSource();
-            dataSource.setURL("jdbc:h2:~/test");
-            dataSource.setUser("sa");
-            dataSource.setPassword("");
-        return dataSource;
+    public DataSource dataSource() {
+        return  new EmbeddedDatabaseBuilder()
+                .setType(EmbeddedDatabaseType.H2)
+                .build();
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate(JdbcDataSource dataSource) {
+    public JdbcTemplate jdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
@@ -60,5 +66,25 @@ public class NewDaoConfig {
     @Bean
     public DecaysFinder finder(ParticleCombinator combinator, ProbableParticlesMaker maker) {
         return new DecaysFinder(combinator, maker);
+    }
+
+    @Bean
+    public DecayParser decayParser(DecayRepository repository) throws FileNotFoundException {
+        return new DecayParser(repository);
+    }
+
+    @Bean
+    public ParticleParser particleParser(ParticleRepository repository) throws FileNotFoundException {
+        return new ParticleParser(repository);
+    }
+
+    @Bean
+    public DbPatcher patcher(JdbcTemplate template) {
+        return new DbPatcher(template);
+    }
+
+    @Bean
+    public DBStarter dbStarter(DecayParser parser, ParticleParser particleParser, DbPatcher patcher) {
+        return new DBStarter(parser, particleParser, patcher);
     }
 }

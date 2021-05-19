@@ -2,6 +2,7 @@ package ru.mipt.dao;
 
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import ru.mipt.Decay;
 import ru.mipt.Particle;
@@ -10,6 +11,7 @@ import ru.mipt.parsers.ParticleParser;
 
 import java.util.HashMap;
 
+@RequiredArgsConstructor
 public class DBFiller {
     private final DecayParser decayParser;
     private final ParticleParser particleParser;
@@ -18,12 +20,6 @@ public class DBFiller {
     private HashMap<String, Particle> particles = new HashMap<>();
     @Getter
     private HashMap<String, Decay> decays = new HashMap<>();
-
-    public DBFiller(DecayParser decayParse, ParticleParser particleParser, DbPatcher patcher) {
-        this.patcher = patcher;
-        this.decayParser = decayParse;
-        this.particleParser = particleParser;
-    }
 
     @SneakyThrows
     public void parse() {

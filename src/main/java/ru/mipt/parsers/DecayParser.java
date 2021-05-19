@@ -1,10 +1,8 @@
 package ru.mipt.parsers;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.stereotype.Component;
 import ru.mipt.Decay;
 import ru.mipt.Particle;
-import ru.mipt.dao.DaoConfig;
 import ru.mipt.dao.DecayRepository;
 
 import java.io.BufferedReader;
@@ -17,7 +15,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-
+@Component
 public class DecayParser {
     private final FileReader inputFile = new FileReader("src/main/resources/DECAY.DEC");
     private final BufferedReader reader = new BufferedReader(inputFile);
@@ -27,12 +25,10 @@ public class DecayParser {
             "PARTWAVE", "BTO3PI_CP", "CB3PI-P00", "STS;", "SVP_HELAMP", "BTOSLLALI;", "TAUSCALARNU;", "TAUHADNU", "TAUVECTORNU;",
             "D_DALITZ;", "D_DALITZ;", "PARTWAVE", "PI0_DALITZ;", "ETA_DALITZ;", "OMEGA_DALITZ;", "SVP_HELAMP", "VVPIPI;", "PARTWAVE",
             "VVP", "VLL;", "BaryonPCR", "TSS;", "TVS_PWAVE"));
-    private final DaoConfig config = new DaoConfig();
-    private final ObjectMapper mapper = new ObjectMapper().enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
-            .enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
-    private final DecayRepository repository = new DecayRepository(mapper, config.getJdbcTemplate());
+    private final DecayRepository repository;
 
-    public DecayParser() throws FileNotFoundException {
+    public DecayParser(DecayRepository repository) throws FileNotFoundException {
+        this.repository = repository;
     }
 
     public HashMap<String, Decay> parse(HashMap<String, Particle> parsedParticles) throws IOException {

@@ -1,27 +1,20 @@
 package ru.mipt.starters;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.mipt.dao.DBFiller;
 import ru.mipt.dao.DbPatcher;
 import ru.mipt.parsers.DecayParser;
 import ru.mipt.parsers.ParticleParser;
 
-import java.io.FileNotFoundException;
-
+@Service
+@RequiredArgsConstructor
 public class DBStarter {
-    public static void main(String[] args) {
-        DecayParser decayParser = null;
-        try {
-            decayParser = new DecayParser();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        ParticleParser particleParser = null;
-        try {
-            particleParser = new ParticleParser();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        DbPatcher patcher = new DbPatcher();
+    private final DecayParser decayParser;
+    private final ParticleParser particleParser;
+    private final DbPatcher patcher;
+
+    public void parse() {
         DBFiller filler = new DBFiller(decayParser, particleParser, patcher);
         filler.parse();
     }

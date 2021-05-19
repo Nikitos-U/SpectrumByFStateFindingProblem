@@ -2,11 +2,12 @@ package ru.mipt.dao;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+@Component
 @RequiredArgsConstructor
 public class DbPatcher {
-    private final DaoConfig  config = new DaoConfig();
-    private final JdbcTemplate template = config.getJdbcTemplate();
+    private final JdbcTemplate template;
 
     public void createTables() {
         template.update("CREATE TABLE PARTICLES (" +
