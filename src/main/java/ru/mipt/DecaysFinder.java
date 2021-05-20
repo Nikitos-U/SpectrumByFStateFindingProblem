@@ -1,10 +1,14 @@
 package ru.mipt;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
 @Value
+@Component
+@RequiredArgsConstructor
 public class DecaysFinder {
     ParticleCombinator particleCombinator;
     ProbableParticlesMaker probableParticlesMaker;

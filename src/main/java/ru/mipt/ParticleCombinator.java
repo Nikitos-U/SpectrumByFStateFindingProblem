@@ -1,17 +1,18 @@
 package ru.mipt;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.sort;
 import static org.apache.commons.collections4.CollectionUtils.subtract;
 
+@Component
+@RequiredArgsConstructor
 public class ParticleCombinator {
     private final HashMap<String, Particle> parsedParticles;
-
-    public ParticleCombinator(HashMap<String, Particle> parsedParticles) {
-        this.parsedParticles = parsedParticles;
-    }
 
     public ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
         ArrayList<String> result1 = new ArrayList<>();

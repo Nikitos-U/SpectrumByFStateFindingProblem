@@ -33,6 +33,8 @@ public class ParticleParser {
             parsedParticles.put(particle.getName(), particle);
         }
         parseAliases(parsedParticles);
+        Particle fake_mother_particle = new Particle("FAKE_MOTHER_PARTICLE_ADD_ALIAS", 42069.0, 0);
+        parsedParticles.put("FAKE_MOTHER_PARTICLE_ADD_ALIAS", fake_mother_particle);
         return parsedParticles;
     }
 
