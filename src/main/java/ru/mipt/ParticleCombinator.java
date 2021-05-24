@@ -1,7 +1,12 @@
 package ru.mipt;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.stereotype.Component;
+import ru.mipt.domain.Cascade;
+import ru.mipt.domain.Decay;
+import ru.mipt.domain.Particle;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -12,7 +17,10 @@ import static org.apache.commons.collections4.CollectionUtils.subtract;
 @Component
 @RequiredArgsConstructor
 public class ParticleCombinator {
-    private final HashMap<String, Particle> parsedParticles;
+    @Setter
+    private Map<String, Particle> parsedParticles;
+    @Setter
+    private MultiValuedMap<List<Particle>, Decay> parsedDecays;
 
     public ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
         ArrayList<String> result1 = new ArrayList<>();
@@ -31,7 +39,9 @@ public class ParticleCombinator {
         return result1;
     }
 
-    ArrayList<Cascade> allCombinations(Cascade cascade, ProbableParticlesMaker probableParticlesMaker) {
+    ArrayList<Cascade> allCombinations(Cascade cascade, ProbableParticlesMaker probableParticlesMaker, Map<String, Particle> parsedParticles, MultiValuedMap<List<Particle>, Decay> parsedDecays) {
+        setParsedDecays(parsedDecays);
+        setParsedParticles(parsedParticles);
         ArrayList<String> fstate = new ArrayList<>();
         ArrayList<Cascade> cascades = new ArrayList<>();
         cascade.getParticleList().forEach(particle -> fstate.add(particle.getId().toString()));
@@ -45,7 +55,7 @@ public class ParticleCombinator {
     }
 
     private void getAndStoreAllCascades(Cascade cascade, List<Particle> possibleDecayParticles, ArrayList<String> fstate, ProbableParticlesMaker probableParticlesMaker, List<Cascade> cascades) {
-        Map<Particle, Decay> mpsFromCombinations = probableParticlesMaker.combinationsToParticles(possibleDecayParticles);
+        Map<Particle, Decay> mpsFromCombinations = probableParticlesMaker.combinationsToParticles(possibleDecayParticles, parsedDecays);
         List<Cascade> probableCascades;
         if (!mpsFromCombinations.isEmpty()) {
             probableCascades = possibleDecayParticles.equals(cascade.getParticleList()) ?

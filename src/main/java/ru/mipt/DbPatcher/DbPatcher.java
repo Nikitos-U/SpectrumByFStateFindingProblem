@@ -1,4 +1,4 @@
-package ru.mipt.dao;
+package ru.mipt.DbPatcher;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,9 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class DbPatcher {
-    private final JdbcTemplate template;
 
-    public void createTables() {
+    public static void createTables(JdbcTemplate template) {
         template.update("CREATE TABLE PARTICLES (" +
                 "  id VARCHAR2(250), " +
                 "  name VARCHAR2(250)," +
@@ -24,6 +23,10 @@ public class DbPatcher {
                 "particles_names VARCHAR2(500), " +
                 "mother_particle_name VARCHAR2(250)," +
                 "decay VARCHAR2(5000)" +
+                ");");
+        template.update("CREATE TABLE CASCADES (" +
+                "  FSTATE VARCHAR(1000), " +
+                " HISTORY CLOB" +
                 ");");
     }
 }

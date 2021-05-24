@@ -1,30 +1,36 @@
-package ru.mipt;
+package ru.mipt.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Particle implements Comparable<Particle> {
     private final String name;
-    private ArrayList<String> aliases = new ArrayList<>();
+    private final List<String> aliases;
     private final Double mass;
     @EqualsAndHashCode.Include
     private final Integer id;
 //   TODO: antiparticle, charge
 
-    public Particle(String name, Double mass, Integer id) {
+    public Particle(@JsonProperty("name") String name,
+                    @JsonProperty("mass") Double mass,
+                    @JsonProperty("aliases") List<String> aliases,
+                    @JsonProperty("id") Integer id) {
+        this.id = id;
         this.name = name;
         this.mass = mass;
-        this.aliases.add(name);
-        this.id = id;
+        this.aliases = aliases;
     }
 
-    public void addAlias(String alias){
-        if (!aliases.contains(alias)){
+    public void addAlias(String alias) {
+        if (!aliases.contains(alias)) {
             aliases.add(alias);
         }
     }
