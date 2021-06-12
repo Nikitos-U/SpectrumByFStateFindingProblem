@@ -19,9 +19,10 @@ public class FstateServiceImpl implements FstateService {
 
     @Override
     public List<Cascade> computeCascades(String fstateString, Map<String, Particle> particles,
-                                         MultiValuedMap<List<Particle>, Decay> decays) {
+                                         MultiValuedMap<List<Particle>, Decay> decays, Map<List<Particle>, List<Cascade>> memo) {
         Cascade fstate = parseParticles(fstateString, particles);
-        return finder.findDecays(fstate, particles, decays);
+        finder.setFstateForParticleCombinator(fstate);
+        return finder.findDecays(fstate, particles, decays, memo);
     }
 
     private Cascade parseParticles(String fstateString, Map<String, Particle> particles) {

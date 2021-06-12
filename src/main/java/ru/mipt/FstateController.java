@@ -5,10 +5,12 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import ru.mipt.domain.Cascade;
 import ru.mipt.domain.Decay;
 import ru.mipt.domain.Particle;
 import ru.mipt.memory.MemoryService;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,12 +27,13 @@ public class FstateController {
 
     @RequestMapping("/compute")
     public String computeFstate(@RequestParam String fstate) {
-        return service.computeCascades(fstate, particles, decays).toString();
+        Map<List<Particle>, List<Cascade>> memo = new HashMap<>();
+        return service.computeCascades(fstate, particles, decays, memo).toString();
     }
 
     @RequestMapping("/saveParticle")
     public void saveParticle(@RequestParam String name, @RequestParam Double mass, @RequestParam String aliases) {
-        Particle particle = new Particle(name, mass, asList(aliases), (int) particles.keySet().stream().sorted().count() + 1);
+        Particle particle = new Particle(name, mass, asList(aliases), (int) particles.keySet().stream().count() + 1);
         memoryService.saveNewParticle(particle);
         particles.put(name,particle);
     }

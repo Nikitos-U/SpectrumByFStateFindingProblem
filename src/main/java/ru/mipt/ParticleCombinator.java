@@ -9,18 +9,23 @@ import ru.mipt.domain.Decay;
 import ru.mipt.domain.Particle;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.sort;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 import static org.apache.commons.collections4.CollectionUtils.subtract;
 
 @Component
 @RequiredArgsConstructor
 public class ParticleCombinator {
     @Setter
+    private Map<List<Particle>, List<Cascade>> memo;
+    @Setter
     private Map<String, Particle> parsedParticles;
     @Setter
     private MultiValuedMap<List<Particle>, Decay> parsedDecays;
+    @Setter
+    private Cascade initialFstate;
 
     public ArrayList<String> combinations2(ArrayList<String> fstate, int len, int startPosition, String[] result) {
         ArrayList<String> result1 = new ArrayList<>();
@@ -39,9 +44,10 @@ public class ParticleCombinator {
         return result1;
     }
 
-    ArrayList<Cascade> allCombinations(Cascade cascade, ProbableParticlesMaker probableParticlesMaker, Map<String, Particle> parsedParticles, MultiValuedMap<List<Particle>, Decay> parsedDecays) {
+    ArrayList<Cascade> allCombinations(Cascade cascade, ProbableParticlesMaker probableParticlesMaker, Map<String, Particle> parsedParticles, MultiValuedMap<List<Particle>, Decay> parsedDecays, Map<List<Particle>, List<Cascade>> memo) {
         setParsedDecays(parsedDecays);
         setParsedParticles(parsedParticles);
+        setMemo(memo);
         ArrayList<String> fstate = new ArrayList<>();
         ArrayList<Cascade> cascades = new ArrayList<>();
         cascade.getParticleList().forEach(particle -> fstate.add(particle.getId().toString()));
@@ -55,6 +61,10 @@ public class ParticleCombinator {
     }
 
     private void getAndStoreAllCascades(Cascade cascade, List<Particle> possibleDecayParticles, ArrayList<String> fstate, ProbableParticlesMaker probableParticlesMaker, List<Cascade> cascades) {
+//        if (memo.containsKey(possibleDecayParticles)) {
+//            cascades.addAll(memo.get(possibleDecayParticles));
+//            return;
+//        }
         Map<Particle, Decay> mpsFromCombinations = probableParticlesMaker.combinationsToParticles(possibleDecayParticles, parsedDecays);
         List<Cascade> probableCascades;
         if (!mpsFromCombinations.isEmpty()) {
@@ -71,18 +81,29 @@ public class ParticleCombinator {
     private List<Cascade> getAllParticlesCascades(Map<Particle, Decay> mpsFromCombinations, Cascade cascade, List<Cascade> cascades) {
         return mpsFromCombinations.values().stream()
                 .map(decay -> createAndFillNewCascade(cascade, decay))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     private List<Cascade> getMissedParticlesCascades(List<Particle> possibleDecayParticles, Map<Particle, Decay> mpsFromCombinations, Cascade cascade, List<Cascade> cascades, ArrayList<String> fstate) {
         List<Cascade> probableCascades = new ArrayList<>();
         int counter = possibleDecayParticles.size();
-        for (Decay decay : mpsFromCombinations.values()) {
-            Cascade formedCascade = createAndFillNewCascade(cascade, decay);
-            Collection<Particle> missedParticles = subtract(cascade.getParticleList(), possibleDecayParticles);
-            missedParticles.forEach(formedCascade::addToParticleList);
-            counter += missedParticles.size();
-            probableCascades.add(formedCascade);
+        Set<Particle> foundParticles = mpsFromCombinations.values().stream().flatMap(decay -> decay.getParticles().stream()).collect(toSet());
+        if (memo.containsKey(foundParticles)) {
+            List<Cascade> formedCascades = memo.get(foundParticles);
+            for (Cascade formedCascade : formedCascades) {
+                Collection<Particle> missedParticles = subtract(cascade.getParticleList(), possibleDecayParticles);
+                missedParticles.forEach(formedCascade::addToParticleList);
+                counter += missedParticles.size();
+                probableCascades.add(formedCascade);
+            }
+        } else {
+            for (Decay decay : mpsFromCombinations.values()) {
+                Cascade formedCascade = createAndFillNewCascade(cascade, decay);
+                Collection<Particle> missedParticles = subtract(cascade.getParticleList(), possibleDecayParticles);
+                missedParticles.forEach(formedCascade::addToParticleList);
+                counter += missedParticles.size();
+                probableCascades.add(formedCascade);
+            }
         }
         if (counter >= fstate.size()) {
             return probableCascades;
@@ -107,8 +128,10 @@ public class ParticleCombinator {
         ArrayList<Decay> history = new ArrayList<>();
         history.add(decay);
         history.addAll(cascade.getHistory());
+        List<Particle> initialParticles = history.stream().map(Decay::getParticles).flatMap(Collection::stream).filter(initialFstate.getParticleList()::contains).collect(toList());
         ArrayList<Particle> particleList = new ArrayList<>();
         particleList.add(decay.getMotherParticle());
-        return new Cascade(particleList, history);
+        sort(initialParticles);
+        return new Cascade(particleList, history, initialParticles);
     }
 }

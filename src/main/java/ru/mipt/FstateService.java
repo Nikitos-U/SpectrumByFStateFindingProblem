@@ -10,5 +10,5 @@ import java.util.Map;
 
 public interface FstateService {
     List<Cascade> computeCascades(String fstate, Map<String, Particle> particles,
-                                  MultiValuedMap<List<Particle>, Decay> decays);
+                                  MultiValuedMap<List<Particle>, Decay> decays, Map<List<Particle>, List<Cascade>> memo);
 }
